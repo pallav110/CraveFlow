@@ -23,3 +23,9 @@ dist/
 
 .DS_Store
 Thumbs.db
+
+# CraveFlow writes this file itself on first run, so it does not need
+# to be saved. Delete it and the demo data comes back.
+data.json
+output_data/data.json
+.claude
