@@ -2,26 +2,28 @@
 <style>
 /* ============================================================
    DESIGN PLAN
-   Layout concept: a Swiss engineering sheet. One accent (the
-   program's own amber #E08830, lifted from its ANSI colour
-   constant), hairline rules instead of cards, a left rail of
-   file names, and diagrams that carry the mechanism.
+   Layout concept: an engineering datasheet for a terminal
+   program. The subject is an amber-on-black console, so this
+   page commits to a single dark look and stays out of the way.
+   One accent — the program's own ANSI amber — a monospace face
+   that matches the source, and hairline rules instead of cards.
 
-   This page deliberately commits to a single dark look, because
-   its subject IS a dark terminal UI - an amber-on-black console.
-   Every colour is set explicitly so it is correct on any host
-   background.
+   The one idea the page has to carry: a keystroke travels.
+   Everything else is reference. So the hero is a literal
+   trace of one order, with the 5W1H questions answered
+   beside it, and the tables follow as lookup.
    ============================================================ */
 :root {
   --bg:      #0d0c0a;
   --panel:   #16140f;
+  --panel2:  #1d1a14;
   --line:    #2b2720;
   --fg:      #e8e4da;
   --dim:     #8b8476;
   --accent:  #e08830;
 
   --sans: "Archivo", "Helvetica Neue", Arial, sans-serif;
-  --mono: "IBM Plex Mono", "Consolas", monospace;
+  --mono: "IBM Plex Mono", "Consolas", "Courier New", monospace;
 
   color-scheme: dark;
 }
@@ -34,16 +36,16 @@ body {
   color: var(--fg);
   font-family: var(--sans);
   font-size: 16px;
-  line-height: 1.6;
+  line-height: 1.65;
   padding-inline: 20px;
   padding-block: 56px;
   -webkit-font-smoothing: antialiased;
 }
 
-.sheet { max-width: 1080px; margin: 0 auto; }
+.sheet { max-width: 1120px; margin: 0 auto; }
 
 /* ---------- masthead ---------- */
-.masthead { border-bottom: 2px solid var(--fg); padding-bottom: 20px; }
+.masthead { border-bottom: 2px solid var(--fg); padding-bottom: 22px; }
 .masthead .kicker {
   font-family: var(--mono);
   font-size: 11px;
@@ -53,19 +55,60 @@ body {
   margin: 0 0 14px;
 }
 .masthead h1 {
-  font-size: clamp(30px, 6vw, 52px);
-  line-height: 1.05;
+  font-size: clamp(28px, 5.4vw, 48px);
+  line-height: 1.06;
   letter-spacing: -.02em;
   font-weight: 700;
-  margin: 0 0 14px;
+  margin: 0 0 16px;
   text-wrap: balance;
 }
 .masthead p.lede {
   font-size: 17px;
   color: var(--dim);
-  max-width: 62ch;
+  max-width: 64ch;
   margin: 0;
 }
+.masthead code, .inline {
+  font-family: var(--mono);
+  font-size: .88em;
+  color: var(--fg);
+}
+
+/* ---------- ledger ---------- */
+.ledger {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  border: 1px solid var(--line);
+  margin-top: 28px;
+}
+.ledger div { padding: 14px 16px; border-right: 1px solid var(--line); min-width: 0; }
+.ledger div:last-child { border-right: 0; }
+.ledger .big {
+  font-family: var(--mono);
+  font-size: 26px;
+  color: var(--accent);
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+.ledger .cap { font-size: 11.5px; color: var(--dim); letter-spacing: .04em; }
+
+/* ---------- section ---------- */
+section { margin-top: 68px; }
+.sec-head {
+  display: flex; align-items: baseline; gap: 14px;
+  border-bottom: 1px solid var(--line); padding-bottom: 10px; flex-wrap: wrap;
+}
+.sec-head .num { font-family: var(--mono); font-size: 12px; color: var(--accent); }
+.sec-head h2 {
+  font-size: clamp(19px, 3.2vw, 26px);
+  margin: 0; letter-spacing: -.01em; font-weight: 600; text-wrap: balance;
+}
+.sec-head .sub {
+  font-family: var(--mono); font-size: 11.5px; color: var(--dim);
+  margin-left: auto; letter-spacing: .05em;
+}
+section > p { max-width: 70ch; color: var(--dim); }
+section > p strong, section > p b { color: var(--fg); font-weight: 600; }
 
 /* ---------- figure ---------- */
 figure { margin: 0; }
@@ -75,19 +118,16 @@ figure { margin: 0; }
   padding: 22px 18px;
   overflow-x: auto;
 }
-.figframe svg { display: block; width: 100%; height: auto; min-width: 620px; }
+.figframe svg { display: block; width: 100%; height: auto; min-width: 640px; }
 figcaption {
-  font-size: 13px;
-  color: var(--dim);
-  padding-top: 10px;
-  border-top: 1px solid var(--line);
-  margin-top: 0;
-  max-width: 74ch;
+  font-size: 13px; color: var(--dim);
+  padding-top: 10px; border-top: 1px solid var(--line);
+  max-width: 76ch;
 }
 figcaption b { color: var(--fg); font-weight: 600; }
 
 svg text { font-family: var(--mono); fill: var(--fg); }
-svg .t-file { font-size: 12.5px; font-weight: 600; fill: var(--fg); }
+svg .t-file { font-size: 12.5px; font-weight: 600; }
 svg .t-fn   { font-size: 10.5px; fill: var(--dim); }
 svg .t-edge { font-size: 10.5px; fill: var(--accent); }
 svg .t-note { font-size: 10px; fill: var(--dim); }
@@ -95,107 +135,180 @@ svg .box    { fill: var(--panel); stroke: var(--line); }
 svg .box-a  { fill: none; stroke: var(--accent); stroke-width: 1.6; }
 svg .edge   { stroke: var(--fg); stroke-width: 1.3; fill: none; }
 svg .edge-d { stroke: var(--dim); stroke-width: 1.1; fill: none; stroke-dasharray: 4 3; }
-svg .hit    { fill: var(--accent); stroke: none; }
 
-/* ---------- section ---------- */
-section { margin-top: 64px; }
-.sec-head { display: flex; align-items: baseline; gap: 14px; border-bottom: 1px solid var(--line); padding-bottom: 10px; }
-.sec-head .num { font-family: var(--mono); font-size: 12px; color: var(--accent); }
-.sec-head h2 { font-size: clamp(20px, 3.4vw, 27px); margin: 0; letter-spacing: -.01em; font-weight: 600; text-wrap: balance; }
-section > p { max-width: 70ch; color: var(--dim); }
-
-/* ---------- ledger (stat row) ---------- */
-.ledger {
+/* ---------- 5W1H grid ---------- */
+.qa {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(128px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1px;
+  background: var(--line);
   border: 1px solid var(--line);
+  margin-top: 24px;
 }
-.ledger div { padding: 14px 16px; border-right: 1px solid var(--line); }
-.ledger div:last-child { border-right: 0; }
-.ledger .big { font-family: var(--mono); font-size: 25px; color: var(--accent); line-height: 1.1; }
-.ledger .cap { font-size: 11.5px; color: var(--dim); letter-spacing: .04em; }
+.qa > div { background: var(--bg); padding: 16px 18px; min-width: 0; }
+.qa dt {
+  font-family: var(--mono);
+  font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--accent); margin: 0 0 8px;
+}
+.qa dd { margin: 0; font-size: 14.5px; color: var(--dim); min-width: 0; }
+.qa dd b { color: var(--fg); font-weight: 600; }
+.qa dd .inline { font-family: var(--mono); font-size: 12.5px; color: var(--fg); }
+
+/* ---------- terminal transcript ---------- */
+.termwrap { border: 1px solid var(--line); background: var(--panel); overflow-x: auto; }
+.term {
+  margin: 0; padding: 16px 18px;
+  font-family: var(--mono); font-size: 12.5px; line-height: 1.55;
+  white-space: pre; color: var(--fg);
+  min-width: max-content;
+}
+.term .prompt { color: var(--accent); }
+.term .out    { color: var(--dim); }
+.term .ok     { color: #8fd67a; }
+.term .warn   { color: #e8796a; }
+.term .bar    { color: var(--line); }
+
+/* ---------- step trace ---------- */
+.steps { margin-top: 24px; border: 1px solid var(--line); }
+.step {
+  display: grid;
+  grid-template-columns: 54px 1fr;
+  gap: 0 18px;
+  padding: 16px 18px;
+  border-top: 1px solid var(--line);
+}
+.step:first-child { border-top: 0; }
+.step .n {
+  font-family: var(--mono); font-size: 12px; color: var(--accent);
+  font-variant-numeric: tabular-nums;
+  padding-top: 2px;
+}
+.step .body { min-width: 0; }
+.step h3 {
+  margin: 0 0 6px; font-size: 15.5px; font-weight: 600; letter-spacing: -.005em;
+}
+.step .fn {
+  font-family: var(--mono); font-size: 12px; color: var(--accent);
+  display: inline-block; margin-bottom: 8px;
+}
+.step p { margin: 0 0 8px; font-size: 14.5px; color: var(--dim); max-width: 72ch; }
+.step p:last-child { margin-bottom: 0; }
+.step p b { color: var(--fg); font-weight: 600; }
+.step .io {
+  font-family: var(--mono); font-size: 12.5px;
+  background: var(--panel2); border: 1px solid var(--line);
+  padding: 10px 12px; margin: 10px 0 0;
+  white-space: pre-wrap; overflow-wrap: anywhere;
+  color: var(--fg);
+}
+.step .io .k { color: var(--accent); }
+.step .io .c { color: var(--dim); }
 
 /* ---------- tables ---------- */
 .tablewrap { overflow-x: auto; border: 1px solid var(--line); }
-table { border-collapse: collapse; width: 100%; min-width: 560px; font-size: 14px; }
-caption { text-align: left; font-family: var(--mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); padding: 14px 16px 10px; }
-th, td { text-align: left; padding: 9px 16px; border-top: 1px solid var(--line); vertical-align: top; }
-thead th { font-family: var(--mono); font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--dim); font-weight: 500; }
-tbody th { font-family: var(--mono); font-size: 12.5px; font-weight: 500; color: var(--fg); white-space: nowrap; }
+table { border-collapse: collapse; width: 100%; min-width: 620px; font-size: 13.5px; }
+caption {
+  text-align: left; font-family: var(--mono); font-size: 11px;
+  letter-spacing: .14em; text-transform: uppercase; color: var(--accent);
+  padding: 13px 16px 9px;
+}
+th, td { text-align: left; padding: 8px 16px; border-top: 1px solid var(--line); vertical-align: top; }
+thead th {
+  font-family: var(--mono); font-size: 10px; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--dim); font-weight: 500; white-space: nowrap;
+}
+tbody th { font-family: var(--mono); font-size: 12px; font-weight: 500; color: var(--fg); white-space: nowrap; }
 td { color: var(--dim); }
-td code, .mono { font-family: var(--mono); font-size: 12.5px; color: var(--fg); }
+td code { font-family: var(--mono); font-size: 12px; color: var(--fg); }
 td .who { color: var(--dim); font-size: 12.5px; }
+td .ln { font-family: var(--mono); font-size: 11px; color: var(--dim); font-variant-numeric: tabular-nums; white-space: nowrap; }
 a { color: var(--accent); }
 
 .note {
   border-left: 2px solid var(--accent);
-  padding: 2px 0 2px 16px;
-  margin: 20px 0;
-  max-width: 70ch;
-  color: var(--dim);
-  font-size: 15px;
+  padding: 2px 0 2px 16px; margin: 22px 0;
+  max-width: 72ch; color: var(--dim); font-size: 15px;
 }
 .note b { color: var(--fg); font-weight: 600; }
+.note code { font-family: var(--mono); font-size: 12.5px; color: var(--fg); }
+
+.grid2 { display: grid; gap: 26px; margin-top: 24px; }
 
 footer {
-  margin-top: 72px;
-  border-top: 1px solid var(--line);
-  padding-top: 18px;
-  font-size: 12.5px;
-  color: var(--dim);
-  font-family: var(--mono);
+  margin-top: 76px; border-top: 1px solid var(--line);
+  padding-top: 18px; font-size: 12px; color: var(--dim); font-family: var(--mono);
+  line-height: 1.8;
+}
+
+@media (max-width: 640px) {
+  body { font-size: 15px; padding-block: 32px; }
+  .step { grid-template-columns: 38px 1fr; gap: 0 12px; }
+  .sec-head .sub { margin-left: 0; width: 100%; }
 }
 </style>
 
 <div class="sheet">
 
   <header class="masthead">
-    <p class="kicker">CraveFlow · 7 files · 87 functions</p>
-    <h1>Which file calls which,<br>and what happens to an order on its way through</h1>
+    <p class="kicker">CraveFlow · 7 files · 91 functions · every number measured from source</p>
+    <h1>Follow one burger<br>from the keystroke to the bill</h1>
     <p class="lede">
-      Every arrow on this page was read out of the actual source with Python's own
-      <code>ast</code> module, not written by hand. Start at <code>main.py</code> —
-      it is the only file you run, and it is the only door into the program.
+      Every function in CraveFlow, every arrow between them, and one order traced from the
+      exact characters Yajat typed to the receipt that prints. The counts on this page were
+      read out of the real files with Python's <code>ast</code> module, and every figure in
+      the worked example was checked against a run of the actual program.
     </p>
   </header>
 
-  <section style="margin-top:40px">
+  <section style="margin-top:0">
     <div class="ledger">
       <div><div class="big">1</div><div class="cap">entry point</div></div>
-      <div><div class="big">4</div><div class="cap">role menus</div></div>
       <div><div class="big">7</div><div class="cap">files</div></div>
-      <div><div class="big">87</div><div class="cap">functions</div></div>
-      <div><div class="big">1</div><div class="cap">shared dictionary</div></div>
+      <div><div class="big">91</div><div class="cap">functions</div></div>
+      <div><div class="big">16</div><div class="cap">input prompts</div></div>
+      <div><div class="big">5</div><div class="cap">order statuses</div></div>
+      <div><div class="big">0</div><div class="cap">files written</div></div>
     </div>
   </section>
 
-  <!-- ============ 1. THE PROGRAM MAP ============ -->
+  <!-- ============ 01 · WHAT THE PROGRAM IS ============ -->
   <section>
-    <div class="sec-head"><span class="num">01</span><h2>The whole program, from the one file you run</h2></div>
+    <div class="sec-head">
+      <span class="num">01</span>
+      <h2>What the program is, and how it is put together</h2>
+      <span class="sub">the 30-second answer</span>
+    </div>
     <p>
-      <code>main.py</code> does exactly two things: it signs you in, and it looks at your
-      role to decide which menu to hand you to. It contains no business logic at all —
-      every real action lives in one of the six files underneath.
+      CraveFlow is a food delivery program that runs entirely in a terminal. One person signs
+      in, and the program gives them the menu that matches their job: a customer orders, a
+      restaurant manages its menu, a rider delivers, and an owner sees the reports. The whole
+      program is <strong>7 files and 91 functions</strong>, written with only Python's built-in
+      tools — no libraries, nothing to install.
+    </p>
+    <p>
+      All the data lives in <strong>one dictionary</strong> called <span class="inline">DATA</span>,
+      held in <span class="inline">data.py</span>. Every other file reads from it and writes to it.
+      That is why the files are joined together: they all share the same dictionary, so an
+      order placed by a customer appears instantly in the restaurant's list.
     </p>
 
     <figure style="margin-top:24px">
       <div class="figframe">
-        <svg viewBox="0 0 760 452" role="img" aria-label="Call graph. main.py run() calls login, then open_menu, which branches to four role files: customer.py, restaurant.py, rider.py and reports.py. All four call into design.py, and five of them call into data.py.">
+        <svg viewBox="0 0 760 452" role="img" aria-label="Program map. main.py run() signs the user in and hands them to one of four role files: customer.py, restaurant.py, rider.py and reports.py. All of them call design.py to print, and all of them read and write the DATA dictionary in data.py.">
           <defs>
             <marker id="ah" markerWidth="9" markerHeight="9" refX="7.5" refY="3.2" orient="auto">
-              <polygon points="0 0, 8 3.2, 0 6.4" fill="var(--fg)"/>
+              <polygon points="0 0, 8 3.2, 0 6.4" fill="#e8e4da"/>
             </marker>
             <marker id="ahd" markerWidth="9" markerHeight="9" refX="7.5" refY="3.2" orient="auto">
-              <polygon points="0 0, 8 3.2, 0 6.4" fill="var(--dim)"/>
+              <polygon points="0 0, 8 3.2, 0 6.4" fill="#8b8476"/>
             </marker>
           </defs>
 
-          <!-- entry -->
           <rect class="box-a" x="290" y="22" width="180" height="56" rx="2"/>
           <text class="t-file" x="380" y="45" text-anchor="middle">main.py</text>
           <text class="t-fn" x="380" y="64" text-anchor="middle">run()</text>
 
-          <!-- trunk -->
           <path class="edge" d="M380 78 V104" marker-end="url(#ah)"/>
           <path class="edge" d="M140 104 H620"/>
           <path class="edge" d="M140 104 V128" marker-end="url(#ah)"/>
@@ -203,7 +316,6 @@ footer {
           <path class="edge" d="M460 104 V128" marker-end="url(#ah)"/>
           <path class="edge" d="M620 104 V128" marker-end="url(#ah)"/>
 
-          <!-- the four role files -->
           <rect class="box" x="75"  y="132" width="130" height="64" rx="2"/>
           <text class="t-file" x="140" y="156" text-anchor="middle">customer.py</text>
           <text class="t-fn" x="140" y="176" text-anchor="middle">customer_menu()</text>
@@ -222,13 +334,11 @@ footer {
 
           <text class="t-note" x="380" y="99" text-anchor="middle">open_menu() reads the role and picks one</text>
 
-          <!-- shared layer -->
           <path class="edge-d" d="M140 196 V344"/>
           <path class="edge-d" d="M300 196 V344"/>
           <path class="edge-d" d="M460 196 V344"/>
           <path class="edge-d" d="M620 196 V344"/>
           <path class="edge-d" d="M140 344 H620"/>
-
           <path class="edge-d" d="M275 344 V360" marker-end="url(#ahd)"/>
           <path class="edge-d" d="M490 344 V360" marker-end="url(#ahd)"/>
 
@@ -244,35 +354,410 @@ footer {
         </svg>
       </div>
       <figcaption>
-        <b>The only solid arrows are from <code>main.py</code>.</b> It is the sole entry point and
-        it touches no business rule — it just signs you in and routes. The dashed lines are the
-        shared layer: every role file reaches <code>design.py</code> to print, and reaches
-        <code>data.py</code> to read and change the one dictionary. Note that
-        <code>main.py</code> also calls <code>data.py</code>'s <code>save_data()</code> itself,
-        once per logout.
+        <b>The only solid arrows come from <code>main.py</code>.</b> It is the single file you
+        run, and it holds no business rule at all — it signs you in and routes you. The dashed
+        lines are the shared layer every role file reaches into.
       </figcaption>
     </figure>
   </section>
 
-  <!-- ============ 2. THE LIFECYCLE ============ -->
+  <!-- ============ 02 · ONE BURGER, TRACED ============ -->
   <section>
-    <div class="sec-head"><span class="num">02</span><h2>The life of one order</h2></div>
+    <div class="sec-head">
+      <span class="num">02</span>
+      <h2>One burger, traced: what happens when you type <span class="inline">F1001 4</span></h2>
+      <span class="sub">verified against a real run</span>
+    </div>
     <p>
-      An order is one dictionary inside <code>DATA["orders"]</code>. Its <code>status</code>
-      field is the only thing that changes as it travels, and each change is made by exactly
-      one function in exactly one file. This is the picture to memorise.
+      This is the question a panel actually asks: <strong>someone types something — where does
+      the information go?</strong> Below is the complete path for Yajat ordering 4 Whoppers
+      from Burger King. Nothing here is estimated. The keystrokes, the prompts, the arithmetic
+      and the final bill all come from running the program.
+    </p>
+
+    <p style="margin-top:26px">
+      <strong>The 5W1H rule</strong> is a way of describing a thing completely by answering six
+      questions. Journalists invented it, and it works just as well on a program: if you can
+      answer all six about CraveFlow, you understand it. Here they are, answered for the burger
+      order — and this is the exact set of questions a viva panel works through.
+    </p>
+
+    <dl class="qa">
+      <div>
+        <dt>What happened</dt>
+        <dd>Yajat ordered <b>4 Whoppers</b> from <b>Burger King</b>. A new order
+        <span class="inline">O1004</span> was created with a total of
+        <b>Rs. 1155.00</b> and status <span class="inline">PLACED</span>.</dd>
+      </div>
+      <div>
+        <dt>Why it happened</dt>
+        <dd>He was signed in as <b>yajat</b>, who is a customer, so the program gave him the
+        customer menu. He chose burgers, then Burger King, then typed
+        <span class="inline">F1001 4</span> — the ID of a Whopper and how many.</dd>
+      </div>
+      <div>
+        <dt>Who was involved</dt>
+        <dd><b>Yajat Sharma</b> (customer), <b>Burger King</b> (restaurant), and 6 functions:
+        <span class="inline">choose_food</span>, <span class="inline">show_food_of</span>,
+        <span class="inline">build_order</span>, <span class="inline">new_order_id</span>,
+        <span class="inline">show_order</span>, <span class="inline">bill_lines</span>.</dd>
+      </div>
+      <div>
+        <dt>Where it went</dt>
+        <dd>Into <span class="inline">DATA["orders"]["O1004"]</span> in
+        <b>data.py</b> — a new dictionary holding who ordered, what, how many, from where,
+        the total, and <span class="inline">"PLACED"</span>.</dd>
+      </div>
+      <div>
+        <dt>When it happened</dt>
+        <dd>The moment he typed <span class="inline">0</span> to say "I'm done" — not when he
+        typed the item. Items accumulate silently; the order is created once, at the end.</dd>
+      </div>
+      <div>
+        <dt>How it happened</dt>
+        <dd><span class="inline">choose_food()</span> read the line, checked it against the
+        restaurant and the sold-out flag, put <span class="inline">{"F1001": 4}</span> into a
+        dictionary, then handed it to <span class="inline">build_order()</span>, which did the
+        multiplication and wrote the order.</dd>
+      </div>
+    </dl>
+
+    <div class="termwrap" style="margin-top:26px">
+      <pre class="term"><span class="bar">-- Hello Yajat Sharma, what kind of food? --------------------------------</span>
+   1.  North Indian
+   2.  South Indian
+   3.  Biryani and Thalis
+   4.  Snacks and Street Food
+   5.  Tea and Beverages
+   6.  Sweets and Desserts
+   7.  Pizza and Pasta
+   8.  Burgers and Sandwiches
+   0.  Go back
+<span class="out">Your choice: </span><span class="prompt">8</span>
+
+<span class="bar">-- Burgers and Sandwiches ---------------------------------------------</span>
+<span class="bar">+- Burger King   -   delivery Rs. 35.00 -------------------------------+</span>
+<span class="bar">| </span>Whopper                 F1001                          Rs. 280.00 <span class="bar">|</span>
+<span class="bar">| </span>Chicken Burger          F1002                          Rs. 220.00 <span class="bar">|</span>
+<span class="bar">| </span>Double Cheeseburger     F1003                          Rs. 340.00 <span class="bar">|</span>
+<span class="bar">| </span>French Fries            F1004                          Rs. 120.00 <span class="bar">|</span>
+<span class="bar">| </span>Onion Rings             F1005                          Rs. 140.00 <span class="bar">|</span>
+<span class="bar">+---------------------------------------------------------------------+</span>
+<span class="bar">+- Subway   -   delivery Rs. 30.00 ------------------------------------+</span>
+<span class="bar">| </span>Chicken Subway          F1011                          Rs. 260.00 <span class="bar">|</span>
+<span class="bar">| </span>Veggie Delight          F1012                          Rs. 200.00 <span class="bar">|</span>
+<span class="bar">| </span>Paneer Tikka Sub        F1013                          Rs. 240.00 <span class="bar">|</span>
+<span class="bar">| </span>Cookies Cream Shake     F1014                          Rs. 150.00 <span class="bar">|</span>
+<span class="bar">+---------------------------------------------------------------------+</span>
+<span class="bar">+- Grill Master   -   delivery Rs. 25.00 --------------------------------+</span>
+<span class="bar">| </span>Grilled Sandwich        F1021                          Rs. 180.00 <span class="bar">|</span>
+<span class="bar">| </span>Club Sandwich           F1022                          Rs. 240.00 <span class="bar">|</span>
+<span class="bar">| </span>Chicken Grill           F1023                          Rs. 280.00 <span class="bar">|</span>
+<span class="bar">| </span>Nachos                  F1024                          Rs. 160.00 <span class="bar">|</span>
+<span class="bar">+---------------------------------------------------------------------+</span>
+Showing 13 items from 3 restaurants.
+Type the number of the kitchen you want.
+  1.  Burger King
+  2.  Subway
+  3.  Grill Master
+<span class="out">Which restaurant? (0 to go back): </span><span class="prompt">1</span>
+
+<span class="bar">+- Burger King ----------------------------------------------------------+</span>
+<span class="bar">| </span>Whopper                 F1001                          Rs. 280.00 <span class="bar">|</span>
+<span class="bar">| </span>Chicken Burger          F1002                          Rs. 220.00 <span class="bar">|</span>
+<span class="bar">| </span>Double Cheeseburger     F1003                          Rs. 340.00 <span class="bar">|</span>
+<span class="bar">| </span>French Fries            F1004                          Rs. 120.00 <span class="bar">|</span>
+<span class="bar">| </span>Onion Rings             F1005                          Rs. 140.00 <span class="bar">|</span>
+<span class="bar">+---------------------------------------------------------------------+</span>
+Type the food ID and how many, for example F101 2
+Type 0 on its own when you are done.
+<span class="out">Food: </span><span class="prompt">F1001 4</span>
+Type the food ID and how many, for example F101 2
+Type 0 on its own when you are done.
+<span class="out">Food: </span><span class="prompt">0</span>
+<span class="ok">[OK] Order placed! Your order ID is O1004.</span>
+
+<span class="bar">+- Order O1004   [PLACED] -------------------------------------------------+</span>
+<span class="bar">| </span>Whopper                   x4                            Rs. 1120.00 <span class="bar">|</span>
+<span class="bar">| </span>                                                                       <span class="bar">|</span>
+<span class="bar">| </span>Food total                                                    Rs. 1120.00 <span class="bar">|</span>
+<span class="bar">| </span>Delivery fee                                                      Rs.  35.00 <span class="bar">|</span>
+<span class="bar">| </span>To pay                                                          Rs. 1155.00 <span class="bar">|</span>
+<span class="bar">+---------------------------------------------------------------------+</span>
+Ordered from Burger King   -   delivered to Yajat Sharma</pre>
+    </div>
+
+    <figure style="margin-top:30px">
+      <div class="figframe">
+        <svg viewBox="0 0 760 400" role="img" aria-label="Trace of the keystroke F1001 4. The choose_food function reads the line, checks the ID exists, checks the quantity is a number, checks the dish belongs to the chosen restaurant, and checks it is not sold out. It stores F1001 with quantity 4. Then build_order works out 280 times 4 equals 1120, adds the 35 rupee delivery fee to reach 1155, and writes the order into the DATA dictionary.">
+          <defs>
+            <marker id="ahb" markerWidth="9" markerHeight="9" refX="7.5" refY="3.2" orient="auto">
+              <polygon points="0 0, 8 3.2, 0 6.4" fill="#e8e4da"/>
+            </marker>
+            <marker id="ahg" markerWidth="9" markerHeight="9" refX="7.5" refY="3.2" orient="auto">
+              <polygon points="0 0, 8 3.2, 0 6.4" fill="#e08830"/>
+            </marker>
+          </defs>
+
+          <rect class="box" x="255" y="10" width="250" height="50" rx="2"/>
+          <text class="t-file" x="380" y="31" text-anchor="middle">You type</text>
+          <text class="t-fn" x="380" y="49" text-anchor="middle">input("Food: ") = "F1001 4"</text>
+
+          <path class="edge" d="M380 60 V82" marker-end="url(#ahb)"/>
+
+          <rect class="box" x="215" y="86" width="330" height="52" rx="2"/>
+          <text class="t-file" x="380" y="106" text-anchor="middle">Split into two parts</text>
+          <text class="t-fn" x="380" y="124" text-anchor="middle">"F1001" and "4"</text>
+
+          <path class="edge" d="M380 138 V160" marker-end="url(#ahb)"/>
+
+          <!-- the four checks -->
+          <rect class="box" x="120" y="164" width="150" height="52" rx="2"/>
+          <text class="t-fn" x="195" y="184" text-anchor="middle">1. ID exists?</text>
+          <text class="t-note" x="195" y="202" text-anchor="middle">F1001 is in DATA["food"]</text>
+
+          <rect class="box" x="305" y="164" width="150" height="52" rx="2"/>
+          <text class="t-fn" x="380" y="184" text-anchor="middle">2. Quantity ok?</text>
+          <text class="t-note" x="380" y="202" text-anchor="middle">"4" is a whole number</text>
+
+          <rect class="box" x="120" y="234" width="150" height="52" rx="2"/>
+          <text class="t-fn" x="195" y="254" text-anchor="middle">3. Same kitchen?</text>
+          <text class="t-note" x="195" y="272" text-anchor="middle">belongs to burger_king</text>
+
+          <rect class="box" x="305" y="234" width="150" height="52" rx="2"/>
+          <text class="t-fn" x="380" y="254" text-anchor="middle">4. Not sold out?</text>
+          <text class="t-note" x="380" y="272" text-anchor="middle">available is True</text>
+
+          <path class="edge" d="M380 138 V152 H195 V160" marker-end="url(#ahb)"/>
+          <path class="edge" d="M380 138 V152 H565 V160" marker-end="url(#ahb)"/>
+          <path class="edge" d="M195 216 V230" marker-end="url(#ahb)"/>
+          <path class="edge" d="M380 216 V230" marker-end="url(#ahb)"/>
+          <path class="edge" d="M565 180 V186" stroke="#8b8476" stroke-width="1.1" fill="none"/>
+
+          <path class="edge" d="M195 286 V308 H380" />
+          <path class="edge" d="M380 286 V308" />
+          <text class="t-note" x="520" y="250" text-anchor="middle">any one of these fails,</text>
+          <text class="t-note" x="520" y="266" text-anchor="middle">the line is refused</text>
+          <text class="t-note" x="520" y="282" text-anchor="middle">and nothing is saved</text>
+
+          <path class="edge" d="M380 308 V330" marker-end="url(#ahg)"/>
+          <text class="t-edge" x="392" y="324">all four passed</text>
+
+          <rect class="box-a" x="180" y="334" width="400" height="56" rx="2"/>
+          <text class="t-file" x="380" y="356" text-anchor="middle">chosen = {"F1001": 4}</text>
+          <text class="t-fn" x="380" y="374" text-anchor="middle">remembered, nothing printed</text>
+        </svg>
+      </div>
+      <figcaption>
+        <b>All four checks must pass before anything is remembered.</b> If any one fails, the
+        program prints a reason and asks again — the basket is never half-saved. This is why
+        you cannot order a pizza from Burger King by accident: check 3 catches it before
+        anything is written.
+      </figcaption>
+    </figure>
+
+    <h3 style="margin:34px 0 0;font-size:17px;font-weight:600;letter-spacing:-.005em">
+      The nine steps, one keystroke at a time
+    </h3>
+    <p style="margin-top:8px">
+      Each step below is a real moment in the run above. The prompt is the exact text the
+      program printed, and the function named is the one that was executing at that instant.
+    </p>
+
+    <div class="steps">
+      <div class="step">
+        <div class="n">1</div>
+        <div class="body">
+          <h3>Sign in, and the role decides the menu</h3>
+          <span class="fn">main.py → login(), welcome(), open_menu()</span>
+          <p>
+            Yajat types his username and password. <span class="inline">login()</span> looks
+            the name up in <span class="inline">DATA["users"]</span> and checks the password.
+            Then <span class="inline">open_menu()</span> reads his role — <span class="inline">"customer"</span>
+            — and hands him to <span class="inline">customer_menu()</span>. One person, one menu;
+            nobody sees options they cannot use.
+          </p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="n">2</div>
+        <div class="body">
+          <h3>Choose a style of food</h3>
+          <span class="fn">customer.py → pick_genre()</span>
+          <p>
+            He picks <b>8</b>, which is <i>Burgers and Sandwiches</i>. The list is not
+            hard-coded: <span class="inline">pick_genre()</span> asks
+            <span class="inline">places_by_genre()</span> which kitchens have food right now and
+            groups them. Because only kitchens with available food are listed, he can never
+            pick a kitchen that is sold out.
+          </p>
+          <div class="io"><span class="c">prompt:</span> Your choice: <span class="k">8</span>
+<span class="c">screen:</span> -- Burgers and Sandwiches -------------------------------------------</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="n">3</div>
+        <div class="body">
+          <h3>The three burger kitchens are printed</h3>
+          <span class="fn">customer.py → browse_one_genre()</span>
+          <p>
+            Burger King, Subway and Grill Master appear as three boxes. The numbers on screen
+            are the numbers the program accepts — that is the point of passing
+            <span class="inline">places</span> down as a list. A kitchen whose food has all sold
+            out never reaches this screen at all.
+          </p>
+          <div class="io"><span class="c">shows:</span> Showing 13 items from 3 restaurants.</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="n">4</div>
+        <div class="body">
+          <h3>Pick the kitchen</h3>
+          <span class="fn">customer.py → choose_food()</span>
+          <p>
+            He types <b>1</b>. The number is turned into a position —
+            <span class="inline">place = places[position - 1]</span> — which is the kitchen
+            <span class="inline">burger_king</span>. From here on, every dish must belong to that
+            one kitchen, because a single order goes to a single kitchen.
+          </p>
+          <div class="io"><span class="c">prompt:</span> Which restaurant? (0 to go back): <span class="k">1</span>
+<span class="c">shows :</span>   1.  Burger King
+<span class="out">         2.  Subway
+         3.  Grill Master</span></div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="n">5</div>
+        <div class="body">
+          <h3>Burger King's menu is printed on its own</h3>
+          <span class="fn">customer.py → show_food_of(place)</span>
+          <p>
+            Now only that kitchen's 5 dishes are shown, one row each. The row is built by
+            <span class="inline">food_line()</span>, which hands the columns to
+            <span class="inline">design.columns()</span> — that is why this table lines up exactly
+            with the tables in every other screen.
+          </p>
+          <div class="io"><span class="c">rows:</span> Whopper F1001 Rs. 280.00
+                <span class="c">... and 4 more</span></div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="n">6</div>
+        <div class="body">
+          <h3>Type <span class="inline">F1001 4</span> — and nothing appears</h3>
+          <span class="fn">customer.py → choose_food(), inside its while loop</span>
+          <p>
+            This is the step that surprises people. The line is split into an ID and a count,
+            put through all four checks, and stored in a plain dictionary called
+            <span class="inline">chosen</span>. <strong>Nothing is printed</strong>, because
+            the order does not exist yet. He is filling a basket, not placing an order. He
+            types <span class="inline">0</span> when he is done — <i>that</i> is the moment the
+            order is created.
+          </p>
+          <div class="io"><span class="c">prompt:</span> Food: <span class="k">F1001 4</span>
+<span class="c">        </span>   <span class="c">-- nothing prints, the line was accepted</span>
+<span class="c">prompt:</span> Food: <span class="k">0</span>
+<span class="k">chosen = {"F1001": 4}</span></div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="n">7</div>
+        <div class="body">
+          <h3>The bill is worked out</h3>
+          <span class="fn">customer.py → build_order(username, place, chosen)</span>
+          <p>
+            <span class="inline">build_order()</span> loops over the basket. For each dish it
+            multiplies price by quantity and adds to a running total:
+            <strong>280 × 4 = 1120</strong>. Then it looks up Burger King's delivery fee
+            (<strong>Rs. 35.00</strong>) and adds it. The sum is rounded with
+            <span class="inline">round()</span> so a total never shows a long tail of decimals.
+          </p>
+          <div class="io"><span class="c">food_total:</span> 280.0 * 4 = 1120.0
+<span class="c">fee:</span>       35.0
+<span class="c">total:</span>      round(1120.0 + 35.0, 2) = <span class="k">1155.0</span></div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="n">8</div>
+        <div class="body">
+          <h3>The order is written into the dictionary</h3>
+          <span class="fn">data.py → DATA["orders"]["O1004"]</span>
+          <p>
+            A new ID is invented by <span class="inline">new_order_id()</span>, and one new
+            dictionary is added to <span class="inline">DATA["orders"]</span> holding seven
+            fields. This is the only moment the order comes into existence. Everything after
+            this just moves the <span class="inline">status</span> field along.
+          </p>
+          <div class="io"><span class="k">"customer"</span>   = "yajat"
+<span class="k">"items"</span>      = ["F1001"]
+<span class="k">"quantities"</span>  = {"F1001": 4}
+<span class="k">"restaurant"</span>  = "burger_king"
+<span class="k">"total"</span>       = 1155.0
+<span class="k">"status"</span>      = "PLACED"
+<span class="k">"rider"</span>       = None</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="n">9</div>
+        <div class="body">
+          <h3>The order screen prints the receipt-shaped box</h3>
+          <span class="fn">customer.py → show_order(order_id) → bill_lines(order_id)</span>
+          <p>
+            <span class="inline">show_order()</span> asks
+            <span class="inline">bill_lines()</span> for the rows to print, so the order screen
+            and the receipt can never disagree about the money. The count is written <b>x4</b>,
+            and the three totals are stacked underneath. The customer now holds an ID —
+            <span class="inline">O1004</span> — which is the handle everything else uses.
+          </p>
+          <div class="io"><span class="c">prints:</span> +- Order O1004   [PLACED] ----------------------------+
+<span class="c">        </span>| Whopper           x4                  Rs. 1120.00 |
+<span class="c">        </span>| Food total                           Rs. 1120.00 |
+<span class="c">        </span>| Delivery fee                             Rs.  35.00 |
+<span class="c">        </span>| To pay                                 Rs. 1155.00 |
+<span class="c">        </span>+--------------------------------------------------+
+<span class="c">also  :</span> Ordered from Burger King   -   delivered to Yajat Sharma</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="note">
+      <b>The single most useful thing to say in a viva:</b> "The order does not exist until he
+      types <code>0</code>. Everything before that is just a basket in a dictionary, held in
+      memory. That is why nothing prints when he types an item — because nothing has been
+      decided yet."
+    </div>
+  </section>
+
+  <!-- ============ 03 · THE ORDER LIFECYCLE ============ -->
+  <section>
+    <div class="sec-head">
+      <span class="num">03</span>
+      <h2>The life of an order: five statuses, four people</h2>
+      <span class="sub">the one thing to memorise</span>
+    </div>
+    <p>
+      An order is one dictionary. Its <span class="inline">status</span> field is the only
+      thing that changes as it travels, and each change is made by exactly one function in
+      exactly one file. Reading the status off an order tells you everything about where it is.
     </p>
 
     <figure style="margin-top:24px">
       <div class="figframe">
-        <svg viewBox="0 0 760 300" role="img" aria-label="Order state machine. place_order in customer.py creates a PLACED order. accept_order in restaurant.py moves it to ACCEPTED. pick_up and deliver in rider.py move it to PICKED_UP then DELIVERED. reject_order and cancel_order can send an order to CANCELLED from PLACED or ACCEPTED.">
+        <svg viewBox="0 0 760 316" role="img" aria-label="Order status flow. An order is created as PLACED by place_order in customer.py. The restaurant accepts it, making it ACCEPTED. A rider picks it up, making it PICKED_UP, then delivers it, making it DELIVERED. The restaurant can reject it or cancel it, and the customer or rider can cancel it, and any of those make it CANCELLED. CANCELLED and DELIVERED are both final.">
           <defs>
             <marker id="ah2" markerWidth="9" markerHeight="9" refX="7.5" refY="3.2" orient="auto">
-              <polygon points="0 0, 8 3.2, 0 6.4" fill="var(--fg)"/>
+              <polygon points="0 0, 8 3.2, 0 6.4" fill="#e8e4da"/>
             </marker>
           </defs>
 
-          <!-- main row -->
           <rect class="box-a" x="5" y="62" width="150" height="56" rx="2"/>
           <text class="t-file" x="80" y="86" text-anchor="middle">PLACED</text>
           <text class="t-fn" x="80" y="104" text-anchor="middle">the order exists</text>
@@ -289,7 +774,6 @@ footer {
           <text class="t-file" x="675" y="86" text-anchor="middle">DELIVERED</text>
           <text class="t-fn" x="675" y="104" text-anchor="middle">receipt prints</text>
 
-          <!-- forward arrows -->
           <path class="edge" d="M155 90 H201" marker-end="url(#ah2)"/>
           <path class="edge" d="M355 90 H401" marker-end="url(#ah2)"/>
           <path class="edge" d="M555 90 H596" marker-end="url(#ah2)"/>
@@ -301,19 +785,17 @@ footer {
           <text class="t-edge" x="575" y="50" text-anchor="middle">deliver()</text>
           <text class="t-note" x="575" y="30" text-anchor="middle">rider.py</text>
 
-          <!-- entry -->
           <path class="edge" d="M80 62 V40 H230" />
           <text class="t-edge" x="238" y="36">place_order()</text>
           <text class="t-note" x="238" y="20">customer.py · creates it here</text>
 
-          <!-- cancelled -->
           <path class="edge" d="M80 118 V160 H248 V204" marker-end="url(#ah2)"/>
           <path class="edge" d="M280 118 V204" marker-end="url(#ah2)"/>
 
           <text class="t-edge" x="120" y="152">reject_order()</text>
           <text class="t-note" x="120" y="136">restaurant.py</text>
           <text class="t-edge" x="290" y="160">cancel_order()</text>
-          <text class="t-note" x="290" y="176">customer.py</text>
+          <text class="t-note" x="290" y="176">customer.py · rider.py</text>
 
           <rect class="box" x="205" y="208" width="150" height="56" rx="2"/>
           <text class="t-file" x="280" y="232" text-anchor="middle">CANCELLED</text>
@@ -325,105 +807,56 @@ footer {
         </svg>
       </div>
       <figcaption>
-        <b>An order can only be cancelled while it is still PLACED or ACCEPTED.</b> Once a
-        rider has collected it, cancelling is no longer offered — the food is already moving.
-        That single rule is enforced in two places, <code>customer.cancel_order()</code> and
-        <code>restaurant.cancel_order()</code>, both through their file's
-        <code>ask_order_id()</code> helper, which refuses any order that is not in an allowed
-        status. The guard is written once per file and reused, rather than repeated in each
-        function.
+        <b>An order can only be cancelled while it is still PLACED or ACCEPTED.</b> Once a rider
+        has collected it, cancelling is no longer offered — the food is already moving. That
+        single rule is written once per role file in a helper called
+        <code>ask_order_id()</code>, which refuses any order not in an allowed status, so no
+        action can be reached with the wrong order.
       </figcaption>
     </figure>
+
+    <div class="tablewrap" style="margin-top:26px">
+      <table>
+        <caption>Every status change, and the only function that can make it</caption>
+        <thead><tr><th>Change</th><th>Function</th><th>File</th><th>Menu number</th><th>What it checks</th></tr></thead>
+        <tbody>
+          <tr><th>→ PLACED</th><td><code>place_order()</code></td><td class="who">customer.py</td><td class="ln">2</td><td class="who">no order already on the way</td></tr>
+          <tr><th>→ ACCEPTED</th><td><code>accept_order()</code></td><td class="who">restaurant.py</td><td class="ln">7</td><td class="who">the order is PLACED and belongs to this kitchen</td></tr>
+          <tr><th>→ CANCELLED</th><td><code>reject_order()</code></td><td class="who">restaurant.py</td><td class="ln">8</td><td class="who">the order is PLACED and belongs to this kitchen</td></tr>
+          <tr><th>→ CANCELLED</th><td><code>cancel_order()</code></td><td class="who">restaurant.py</td><td class="ln">9</td><td class="who">the order is ACCEPTED and belongs to this kitchen</td></tr>
+          <tr><th>→ CANCELLED</th><td><code>cancel_order()</code></td><td class="who">customer.py</td><td class="ln">4</td><td class="who">it is theirs, PLACED or ACCEPTED, and no rider has it</td></tr>
+          <tr><th>→ CANCELLED</th><td><code>cancel_order()</code></td><td class="who">rider.py</td><td class="ln">5</td><td class="who">they are carrying it and no rider is stamped on it</td></tr>
+          <tr><th>→ PICKED_UP</th><td><code>pick_up()</code></td><td class="who">rider.py</td><td class="ln">3</td><td class="who">they are BUSY carrying it</td></tr>
+          <tr><th>→ DELIVERED</th><td><code>deliver()</code></td><td class="who">rider.py</td><td class="ln">4</td><td class="who">they are BUSY carrying it</td></tr>
+        </tbody>
+      </table>
+    </div>
   </section>
 
-  <!-- ============ 3. ONE ACTION END TO END ============ -->
+  <!-- ============ 04 · EVERY FUNCTION ============ -->
   <section>
-    <div class="sec-head"><span class="num">03</span><h2>What actually happens when you accept an order</h2></div>
+    <div class="sec-head">
+      <span class="num">04</span>
+      <h2>Every function in the program, file by file</h2>
+      <span class="sub">91 functions · 7 files</span>
+    </div>
     <p>
-      This is the question a panel asks: <i>press one key — where does the information go?</i>
-      Here is the full path for the restaurant pressing <b>Accept</b> on order O1004.
+      The left column is the function. The middle column is what it actually does. The right
+      column is who calls it — that last column is the part worth being able to say out loud,
+      because it proves the files are genuinely joined rather than just sitting next to each
+      other. Every entry below was read out of the source, not typed by hand.
     </p>
 
-    <figure style="margin-top:24px">
-      <div class="figframe">
-        <svg viewBox="0 0 760 430" role="img" aria-label="Data path for accepting an order. The restaurant types an order ID, restaurant.accept_order checks the status through ask_order_id, the status field of the order dictionary is set to ACCEPTED, save_data is called, and the whole dictionary is written to output_data/data.json.">
-          <defs>
-            <marker id="ah3" markerWidth="9" markerHeight="9" refX="7.5" refY="3.2" orient="auto">
-              <polygon points="0 0, 8 3.2, 0 6.4" fill="var(--fg)"/>
-            </marker>
-            <marker id="ah3a" markerWidth="9" markerHeight="9" refX="7.5" refY="3.2" orient="auto">
-              <polygon points="0 0, 8 3.2, 0 6.4" fill="var(--accent)"/>
-            </marker>
-          </defs>
-
-          <rect class="box" x="200" y="12" width="360" height="50" rx="2"/>
-          <text class="t-file" x="380" y="34" text-anchor="middle">You type the order ID</text>
-          <text class="t-fn" x="380" y="52" text-anchor="middle">input("Which order to accept?")</text>
-
-          <path class="edge" d="M380 62 V84" marker-end="url(#ah3)"/>
-
-          <rect class="box" x="200" y="88" width="360" height="62" rx="2"/>
-          <text class="t-file" x="380" y="112" text-anchor="middle">restaurant.ask_order_id()</text>
-          <text class="t-fn" x="380" y="132" text-anchor="middle">refuses anything not PLACED</text>
-
-          <path class="edge" d="M380 150 V174" marker-end="url(#ah3)"/>
-
-          <rect class="box-a" x="150" y="178" width="460" height="76" rx="2"/>
-          <text class="t-file" x="380" y="202" text-anchor="middle">The dictionary changes</text>
-          <text class="t-fn" x="380" y="224" text-anchor="middle">DATA["orders"]["O1004"]["status"]</text>
-          <text class="t-fn" x="380" y="242" text-anchor="middle">= "ACCEPTED"</text>
-
-          <path class="edge" d="M380 254 V282" marker-end="url(#ah3a)"/>
-          <text class="t-edge" x="392" y="274">save_data()</text>
-
-          <rect class="box" x="200" y="286" width="360" height="50" rx="2"/>
-          <text class="t-file" x="380" y="308" text-anchor="middle">data.save_data()</text>
-          <text class="t-fn" x="380" y="326" text-anchor="middle">json.dump writes all of DATA</text>
-
-          <path class="edge" d="M380 336 V362" marker-end="url(#ah3a)"/>
-
-          <rect class="box" x="200" y="366" width="360" height="52" rx="2"/>
-          <text class="t-file" x="380" y="389" text-anchor="middle">output_data/data.json</text>
-          <text class="t-fn" x="380" y="407" text-anchor="middle">the change survives a restart</text>
-
-          <!-- memory boundary -->
-          <path class="edge-d" d="M672 12 V346"/>
-          <text class="t-note" x="686" y="180">memory only</text>
-          <text class="t-note" x="686" y="194">a plain dictionary</text>
-          <text class="t-note" x="686" y="366">on the disk</text>
-          <text class="t-note" x="686" y="380">a real file</text>
-        </svg>
-      </div>
-      <figcaption>
-        <b>Everything above the dashed line is memory; everything below is a file.</b> The
-        dictionary is a normal Python object that disappears when the program closes — which is
-        why <code>save_data()</code> has to be called at the end of every action that changes
-        something. The file part is fenced off below a marked line in <code>data.py</code>, so
-        the program still runs perfectly well if that part is deleted.
-      </figcaption>
-    </figure>
-  </section>
-
-  <!-- ============ 4. THE FILES ============ -->
-  <section>
-    <div class="sec-head"><span class="num">04</span><h2>Every file, and who reaches into it</h2></div>
-    <p>
-      The left column is the function. The right column is who calls it — that is the part
-      worth being able to say out loud, because it is what proves the files are joined rather
-      than just sitting next to each other.
-    </p>
-
-    <div style="display:grid;gap:28px;margin-top:24px">
-
+    <div class="grid2">
       <div class="tablewrap">
         <table>
-          <caption>main.py — the entry point · 8 functions</caption>
+          <caption>main.py — the only file you run · 8 functions · 115 lines</caption>
           <thead><tr><th>Function</th><th>What it does</th><th>Called by</th></tr></thead>
           <tbody>
-            <tr><th>run()</th><td>Keeps signing in and out until someone types exit</td><td class="who">Python itself, at the bottom of the file</td></tr>
-            <tr><th>login()</th><td>Asks username and password; returns the name or None</td><td class="who">run()</td></tr>
-            <tr><th>welcome()</th><td>Says who you are and what you can do</td><td class="who">run()</td></tr>
-            <tr><th>open_menu()</th><td>Reads the role and picks one of the four below</td><td class="who">run()</td></tr>
+            <tr><th>run()</th><td>Signs in and out until someone types <code>exit</code></td><td class="who">Python itself, at the bottom of the file</td></tr>
+            <tr><th>login()</th><td>Asks username and password; returns the name, or None for exit</td><td class="who">run()</td></tr>
+            <tr><th>welcome()</th><td>Says who you are and what role you have</td><td class="who">run()</td></tr>
+            <tr><th>open_menu()</th><td>Reads the role and picks one of the four menus</td><td class="who">run()</td></tr>
             <tr><th>customer_menu()</th><td>Thin wrapper — forwards to customer.py</td><td class="who">open_menu()</td></tr>
             <tr><th>restaurant_menu()</th><td>Thin wrapper — forwards to restaurant.py</td><td class="who">open_menu()</td></tr>
             <tr><th>rider_menu()</th><td>Thin wrapper — forwards to rider.py</td><td class="who">open_menu()</td></tr>
@@ -434,70 +867,93 @@ footer {
 
       <div class="tablewrap">
         <table>
-          <caption>customer.py — what a customer can do · 15 functions</caption>
+          <caption>data.py — the one dictionary · 5 functions · 439 lines</caption>
           <thead><tr><th>Function</th><th>What it does</th><th>Called by</th></tr></thead>
           <tbody>
-            <tr><th>customer_menu()</th><td>The loop that shows the menu</td><td class="who">main.py</td></tr>
-            <tr><th>place_order()</th><td>Asks which food, how many, then saves the order</td><td class="who">customer_menu()</td></tr>
-            <tr><th>build_order()</th><td>Works out the bill and writes the new order into DATA</td><td class="who">place_order()</td></tr>
-            <tr><th>new_order_id()</th><td>Invents the next O-number</td><td class="who">build_order()</td></tr>
-            <tr><th>bill_lines()</th><td>The bill rows — shared by the order screen and the receipt</td><td class="who">show_order(), show_receipt()</td></tr>
-            <tr><th>show_order()</th><td>Prints one order with its items and bill</td><td class="who">my_orders(), place_order()</td></tr>
-            <tr><th>show_receipt()</th><td>Prints the thank-you receipt</td><td class="who"><b>rider.py</b> — deliver()</td></tr>
-            <tr><th>my_orders()</th><td>Lists every order belonging to this customer</td><td class="who">customer_menu()</td></tr>
-            <tr><th>cancel_order()</th><td>Cancels one of their own orders</td><td class="who">customer_menu()</td></tr>
-            <tr><th>browse()</th><td>Lists restaurants that have food available</td><td class="who">customer_menu(), place_order()</td></tr>
-            <tr><th>available_food()</th><td>The food one restaurant is currently offering</td><td class="who">browse(), show_food_of()</td></tr>
-            <tr><th>my_active_order()</th><td>Any order not yet finished</td><td class="who">customer_menu(), place_order()</td></tr>
-            <tr><th>restaurants_with_food()</th><td>Which restaurants can be ordered from at all</td><td class="who">browse()</td></tr>
-            <tr><th>food_line()</th><td>One menu row, aligned into columns</td><td class="who">browse(), show_food_of()</td></tr>
-            <tr><th>show_food_of()</th><td>Prints one restaurant's menu</td><td class="who">place_order()</td></tr>
+            <tr><th>make_data()</th><td>Builds the dictionary with the demo examples already in it</td><td class="who">once, at startup</td></tr>
+            <tr><th>add_place()</th><td>Nested helper — puts one restaurant into the users dictionary</td><td class="who">make_data(), 29 times</td></tr>
+            <tr><th>add_food()</th><td>Nested helper — puts one dish into the food dictionary</td><td class="who">make_data(), 143 times</td></tr>
+            <tr><th>save_data()</th><td>Switched off on purpose — the body is <code>pass</code></td><td class="who">14 call sites, all harmless</td></tr>
+            <tr><th>show_data()</th><td>Prints the whole dictionary, for checking</td><td class="who">nothing — kept for debugging</td></tr>
           </tbody>
         </table>
       </div>
 
       <div class="tablewrap">
         <table>
-          <caption>restaurant.py — what a restaurant can do · 19 functions</caption>
+          <caption>customer.py — what a customer can do · 19 functions · 640 lines</caption>
           <thead><tr><th>Function</th><th>What it does</th><th>Called by</th></tr></thead>
           <tbody>
-            <tr><th>restaurant_menu()</th><td>The loop that shows the menu</td><td class="who">main.py</td></tr>
-            <tr><th>ask_order_id()</th><td>The guard — asks for an ID, refuses wrong statuses</td><td class="who">accept_order(), reject_order(), cancel_order()</td></tr>
-            <tr><th>accept_order()</th><td>PLACED → ACCEPTED</td><td class="who">restaurant_menu()</td></tr>
-            <tr><th>reject_order()</th><td>PLACED → CANCELLED</td><td class="who">restaurant_menu()</td></tr>
-            <tr><th>cancel_order()</th><td>Cancels an order this kitchen was handling</td><td class="who">restaurant_menu()</td></tr>
-            <tr><th>show_orders()</th><td>Prints the orders in one status</td><td class="who">ask_order_id(), order_history()</td></tr>
-            <tr><th>orders_with_status()</th><td>Filters this restaurant's orders</td><td class="who">ask_order_id()</td></tr>
-            <tr><th>order_history()</th><td>Shows everything, newest status first</td><td class="who">restaurant_menu()</td></tr>
-            <tr><th>my_orders()</th><td>Orders belonging to this kitchen</td><td class="who">order_history(), orders_with_status()</td></tr>
-            <tr><th>add_food()</th><td>Adds a new item to the menu</td><td class="who">restaurant_menu()</td></tr>
-            <tr><th>change_price()</th><td>Changes what an item costs</td><td class="who">restaurant_menu()</td></tr>
-            <tr><th>toggle_available()</th><td>Marks an item sold out or back in stock</td><td class="who">restaurant_menu()</td></tr>
-            <tr><th>delete_food()</th><td>Removes an item from the menu</td><td class="who">restaurant_menu()</td></tr>
-            <tr><th>ask_item_id()</th><td>The guard for menu edits — asks which item</td><td class="who">change_price(), delete_food(), toggle_available()</td></tr>
-            <tr><th>read_price()</th><td>Asks for a price and checks it is sensible</td><td class="who">add_food(), change_price()</td></tr>
-            <tr><th>new_food_id()</th><td>Invents the next F-number</td><td class="who">add_food()</td></tr>
-            <tr><th>my_items()</th><td>This kitchen's food, available or not</td><td class="who">show_my_food()</td></tr>
-            <tr><th>show_my_food()</th><td>Prints the menu table</td><td class="who">restaurant_menu() and all four edit actions</td></tr>
+            <tr><th>customer_menu()</th><td>The loop that shows the customer menu</td><td class="who">main.py</td></tr>
+            <tr><th>browse()</th><td>Asks which kind of food, then shows only those kitchens</td><td class="who">customer_menu(), choice 1</td></tr>
+            <tr><th>place_order()</th><td>Asks which kind of food, then goes straight into ordering</td><td class="who">customer_menu(), choice 2</td></tr>
+            <tr><th>pick_genre()</th><td>Shows the styles and returns the one they picked</td><td class="who">browse(), place_order()</td></tr>
+            <tr><th>browse_one_genre()</th><td>Prints one style's kitchens, then lets them order</td><td class="who">browse(), place_order()</td></tr>
+            <tr><th>choose_food()</th><td>Pick the kitchen, then pick the food. The busiest function</td><td class="who">browse_one_genre()</td></tr>
+            <tr><th>show_food_of()</th><td>Prints one restaurant's menu on its own</td><td class="who">choose_food()</td></tr>
+            <tr><th>build_order()</th><td>Works out the bill and writes the order into DATA</td><td class="who">choose_food()</td></tr>
+            <tr><th>new_order_id()</th><td>Invents the next O-number that is not being used</td><td class="who">build_order()</td></tr>
+            <tr><th>bill_lines()</th><td>The bill rows — shared by the order screen and the receipt</td><td class="who">show_order(), show_receipt()</td></tr>
+            <tr><th>show_order()</th><td>Prints one order with its items and its bill</td><td class="who">my_orders(), choose_food()</td></tr>
+            <tr><th>show_receipt()</th><td>Prints the thank-you receipt</td><td class="who"><b>rider.py</b> — deliver()</td></tr>
+            <tr><th>my_orders()</th><td>Lists every order belonging to this customer</td><td class="who">customer_menu(), choice 3</td></tr>
+            <tr><th>cancel_order()</th><td>Cancels one of this customer's own orders</td><td class="who">customer_menu(), choice 4</td></tr>
+            <tr><th>my_active_order()</th><td>The order this customer already has going, if any</td><td class="who">choose_food(), customer_menu()</td></tr>
+            <tr><th>places_by_genre()</th><td>Groups every kitchen that has food, by kind of food</td><td class="who">pick_genre()</td></tr>
+            <tr><th>restaurants_with_food()</th><td>Which restaurants can be ordered from at all</td><td class="who">places_by_genre()</td></tr>
+            <tr><th>available_food()</th><td>The food one restaurant is currently selling</td><td class="who">browse_one_genre(), show_food_of()</td></tr>
+            <tr><th>food_line()</th><td>One menu row, aligned into columns</td><td class="who">browse_one_genre(), show_food_of()</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="tablewrap">
+        <table>
+          <caption>restaurant.py — what a restaurant can do · 19 functions · 495 lines</caption>
+          <thead><tr><th>Function</th><th>What it does</th><th>Called by</th></tr></thead>
+          <tbody>
+            <tr><th>restaurant_menu()</th><td>The loop that shows the restaurant menu</td><td class="who">main.py</td></tr>
+            <tr><th>show_my_food()</th><td>Shows this kitchen's food in two tables</td><td class="who">menu 1, and before every edit</td></tr>
+            <tr><th>add_food()</th><td>Adds one new item to the menu</td><td class="who">menu 2</td></tr>
+            <tr><th>change_price()</th><td>Changes what an item costs</td><td class="who">menu 3</td></tr>
+            <tr><th>toggle_available()</th><td>Marks an item sold out, or puts it back on sale</td><td class="who">menu 4</td></tr>
+            <tr><th>delete_food()</th><td>Removes an item from the menu for good</td><td class="who">menu 5</td></tr>
+            <tr><th>order_history()</th><td>Shows every order this kitchen has ever had</td><td class="who">menu 6</td></tr>
+            <tr><th>accept_order()</th><td>PLACED → ACCEPTED</td><td class="who">menu 7</td></tr>
+            <tr><th>reject_order()</th><td>PLACED → CANCELLED</td><td class="who">menu 8</td></tr>
+            <tr><th>cancel_order()</th><td>ACCEPTED → CANCELLED</td><td class="who">menu 9</td></tr>
+            <tr><th>ask_order_id()</th><td>The guard — shows what you may act on, refuses the rest</td><td class="who">accept, reject, cancel</td></tr>
+            <tr><th>orders_with_status()</th><td>Filters this kitchen's orders by status</td><td class="who">ask_order_id()</td></tr>
+            <tr><th>show_orders()</th><td>Prints the orders in a list, one row each</td><td class="who">ask_order_id(), order_history()</td></tr>
+            <tr><th>my_orders()</th><td>The IDs of every order placed at this kitchen</td><td class="who">orders_with_status(), order_history()</td></tr>
+            <tr><th>ask_item_id()</th><td>The guard for menu edits — asks which item, checks it is theirs</td><td class="who">change, delete, toggle</td></tr>
+            <tr><th>read_price()</th><td>Asks for a price and checks it is a sensible number</td><td class="who">add_food(), change_price()</td></tr>
+            <tr><th>new_food_id()</th><td>Invents the next F-number that is not being used</td><td class="who">add_food()</td></tr>
+            <tr><th>my_items()</th><td>This kitchen's food, sold out or not</td><td class="who">show_my_food()</td></tr>
             <tr><th>food_line()</th><td>One menu row, aligned into columns</td><td class="who">show_my_food()</td></tr>
           </tbody>
         </table>
       </div>
 
+    </div>
+
+    <div class="grid2" style="margin-top:26px">
       <div class="tablewrap">
         <table>
-          <caption>rider.py — what a rider can do · 12 functions</caption>
+          <caption>rider.py — what a rider can do · 12 functions · 336 lines</caption>
           <thead><tr><th>Function</th><th>What it does</th><th>Called by</th></tr></thead>
           <tbody>
-            <tr><th>rider_menu()</th><td>The loop that shows the menu</td><td class="who">main.py</td></tr>
-            <tr><th>claim_order()</th><td>Takes an order, locks the rider to BUSY</td><td class="who">rider_menu()</td></tr>
-            <tr><th>pick_up()</th><td>→ PICKED_UP, after collecting the food</td><td class="who">rider_menu()</td></tr>
-            <tr><th>deliver()</th><td>→ DELIVERED, frees the rider, prints the receipt</td><td class="who">rider_menu()</td></tr>
-            <tr><th>cancel_order()</th><td>A rider cancels an order they cannot finish</td><td class="who">rider_menu()</td></tr>
-            <tr><th>ask_order_id()</th><td>The guard — asks which order to act on</td><td class="who">claim_order()</td></tr>
-            <tr><th>my_current_order()</th><td>The order this rider is holding</td><td class="who">rider_menu(), pick_up(), deliver()</td></tr>
-            <tr><th>my_status()</th><td>Shows whether this rider is FREE or BUSY</td><td class="who">rider_menu()</td></tr>
-            <tr><th>show_open_orders()</th><td>Accepted orders waiting for a rider</td><td class="who">rider_menu()</td></tr>
+            <tr><th>rider_menu()</th><td>The loop that shows the rider menu</td><td class="who">main.py</td></tr>
+            <tr><th>show_open_orders()</th><td>Accepted orders waiting for a rider</td><td class="who">menu 1</td></tr>
+            <tr><th>claim_order()</th><td>Takes an order and becomes BUSY holding it</td><td class="who">menu 2</td></tr>
+            <tr><th>pick_up()</th><td>→ PICKED_UP, after collecting the food</td><td class="who">menu 3</td></tr>
+            <tr><th>deliver()</th><td>→ DELIVERED, frees the rider, prints the receipt</td><td class="who">menu 4</td></tr>
+            <tr><th>cancel_order()</th><td>Cancels the order this rider is carrying</td><td class="who">menu 5</td></tr>
+            <tr><th>my_status()</th><td>Shows whether this rider is FREE or BUSY, and with what</td><td class="who">menu 6</td></tr>
+            <tr><th>ask_order_id()</th><td>The guard — asks which waiting order we mean</td><td class="who">claim_order()</td></tr>
+            <tr><th>open_orders()</th><td>The orders waiting for a rider to collect them</td><td class="who">show_open_orders(), claim_order()</td></tr>
+            <tr><th>my_lock()</th><td>This rider's own record — status and current order</td><td class="who">claim, pick_up, deliver, cancel, status</td></tr>
+            <tr><th>my_current_order()</th><td>The order this rider is holding, or None</td><td class="who">pick_up(), deliver(), cancel_order()</td></tr>
             <tr><th>order_line()</th><td>One order row, aligned into columns</td><td class="who">show_open_orders(), my_status()</td></tr>
           </tbody>
         </table>
@@ -505,19 +961,19 @@ footer {
 
       <div class="tablewrap">
         <table>
-          <caption>reports.py — what the owner sees · 12 functions</caption>
+          <caption>reports.py — what the owner sees · 12 functions · 290 lines</caption>
           <thead><tr><th>Function</th><th>What it does</th><th>Called by</th></tr></thead>
           <tbody>
-            <tr><th>owner_menu()</th><td>The loop that shows the menu</td><td class="who">main.py</td></tr>
-            <tr><th>total_sales()</th><td>Adds up every DELIVERED order</td><td class="who">show_sales()</td></tr>
-            <tr><th>show_sales()</th><td>Prints the sales report</td><td class="who">owner_menu(), show_everything()</td></tr>
-            <tr><th>show_cancelled()</th><td>Prints cancellations and what they cost</td><td class="who">owner_menu(), show_everything()</td></tr>
-            <tr><th>show_best_seller()</th><td>Prints the best selling item</td><td class="who">owner_menu(), show_everything()</td></tr>
-            <tr><th>best_seller()</th><td>Finds it, by counting the quantities dictionary</td><td class="who">show_best_seller()</td></tr>
-            <tr><th>show_everything()</th><td>All three reports on one page</td><td class="who">owner_menu()</td></tr>
-            <tr><th>cancelled_count()</th><td>How many were cancelled</td><td class="who">show_cancelled()</td></tr>
-            <tr><th>money_lost()</th><td>What those cancellations were worth</td><td class="who">show_cancelled()</td></tr>
-            <tr><th>orders_with_status()</th><td>Filters orders by status</td><td class="who">total_sales(), cancelled_count(), money_lost(), best_seller()</td></tr>
+            <tr><th>owner_menu()</th><td>The loop that shows the owner menu</td><td class="who">main.py</td></tr>
+            <tr><th>show_sales()</th><td>Prints the total sales report</td><td class="who">menu 1, show_everything()</td></tr>
+            <tr><th>show_cancelled()</th><td>Prints cancellations and what they cost</td><td class="who">menu 2, show_everything()</td></tr>
+            <tr><th>show_best_seller()</th><td>Prints the best selling item</td><td class="who">menu 3, show_everything()</td></tr>
+            <tr><th>show_everything()</th><td>All three reports on one page</td><td class="who">menu 4</td></tr>
+            <tr><th>best_seller()</th><td>Finds the top item, by counting the quantities dictionary</td><td class="who">show_best_seller()</td></tr>
+            <tr><th>total_sales()</th><td>Adds up the stored total of every DELIVERED order</td><td class="who">show_sales()</td></tr>
+            <tr><th>money_lost()</th><td>What the cancelled orders were worth</td><td class="who">show_cancelled()</td></tr>
+            <tr><th>cancelled_count()</th><td>How many orders were cancelled</td><td class="who">show_cancelled()</td></tr>
+            <tr><th>orders_with_status()</th><td>Filters every order by one status</td><td class="who">the other 6 functions in this file</td></tr>
             <tr><th>sum_of_totals()</th><td>Adds up stored totals — never recalculates them</td><td class="who">total_sales(), money_lost()</td></tr>
             <tr><th>all_orders()</th><td>Every order ID, sorted</td><td class="who">orders_with_status()</td></tr>
           </tbody>
@@ -526,37 +982,123 @@ footer {
 
       <div class="tablewrap">
         <table>
-          <caption>data.py — the one dictionary · 6 functions</caption>
+          <caption>design.py — how the program looks · 16 functions · 218 lines</caption>
           <thead><tr><th>Function</th><th>What it does</th><th>Called by</th></tr></thead>
           <tbody>
-            <tr><th>make_data()</th><td>Builds the dictionary with the demo examples in it</td><td class="who">module level, once at startup</td></tr>
-            <tr><th>start_data()</th><td>Loads the saved file if it exists, otherwise starts fresh</td><td class="who">main.py</td></tr>
-            <tr><th>data_path()</th><td>Works out where data.json lives, whatever folder you ran from</td><td class="who">save_data(), load_data(), start_data()</td></tr>
-            <tr><th>save_data()</th><td>Writes the whole dictionary to the file as JSON</td><td class="who">main.py and every action in all four role files</td></tr>
-            <tr><th>load_data()</th><td>Reads it back at the next startup</td><td class="who">start_data()</td></tr>
-            <tr><th>show_data()</th><td>Prints the whole dictionary, for debugging</td><td class="who">nothing — kept for checking the data</td></tr>
+            <tr><th>banner()</th><td>Draws the CRAVEFLOW logo and the tagline</td><td class="who">main.py — once, at program start</td></tr>
+            <tr><th>heading()</th><td>Prints a section heading with rules either side</td><td class="who">all 5 files that print</td></tr>
+            <tr><th>line()</th><td>Prints secondary information, in grey</td><td class="who">all 5 files that print</td></tr>
+            <tr><th>ok()</th><td>Prints a success as <code>[OK] ...</code></td><td class="who">4 of the 5 files</td></tr>
+            <tr><th>warn()</th><td>Prints a problem as <code>[!] ...</code></td><td class="who">all 5 files that print</td></tr>
+            <tr><th>box()</th><td>Draws a bordered panel around a list of lines</td><td class="who">customer, restaurant, rider, reports</td></tr>
+            <tr><th>columns()</th><td>Prints two aligned columns, exactly WIDTH wide</td><td class="who">customer, restaurant, rider, reports</td></tr>
+            <tr><th>options()</th><td>Prints numbered menu choices, plus 0. Go back</td><td class="who">the four menu loops</td></tr>
+            <tr><th>rule()</th><td>Draws a thin divider between two screens</td><td class="who">the four menu loops</td></tr>
+            <tr><th>money()</th><td>Formats a number as <code>Rs. 1,234.00</code> style rupees</td><td class="who">customer, restaurant, rider, reports</td></tr>
+            <tr><th>clear_screen()</th><td>Clears the terminal, once, at the start</td><td class="who">main.py</td></tr>
+            <tr><th>make_logo()</th><td>Builds the wordmark from the 5x5 letter patterns</td><td class="who">banner()</td></tr>
+            <tr><th>cut()</th><td>Shortens text so it cannot overflow its column</td><td class="who">columns(), box()</td></tr>
+            <tr><th>pad_right()</th><td>Aligns text to the left</td><td class="who">columns(), box(), and the row helpers</td></tr>
+            <tr><th>pad_left()</th><td>Aligns text to the right</td><td class="who">columns()</td></tr>
+            <tr><th>center_text()</th><td>Centres text inside a fixed width</td><td class="who">banner()</td></tr>
           </tbody>
         </table>
       </div>
 
+      <div class="tablewrap">
+        <table>
+          <caption>Why design.py earns its place — real call counts</caption>
+          <thead><tr><th>Helper</th><th>Times used</th><th>Which files use it</th></tr></thead>
+          <tbody>
+            <tr><th>warn()</th><td class="ln">48</td><td class="who">main 2, customer 18, restaurant 13, rider 13, reports 2</td></tr>
+            <tr><th>line()</th><td class="ln">44</td><td class="who">main 3, customer 12, restaurant 10, rider 14, reports 5</td></tr>
+            <tr><th>heading()</th><td class="ln">33</td><td class="who">main 1, customer 7, restaurant 12, rider 8, reports 5</td></tr>
+            <tr><th>ok()</th><td class="ln">19</td><td class="who">main 1, customer 5, restaurant 8, rider 5</td></tr>
+            <tr><th>money()</th><td class="ln">18</td><td class="who">customer 8, restaurant 4, rider 2, reports 4</td></tr>
+            <tr><th>box()</th><td class="ln">11</td><td class="who">customer 4, restaurant 3, rider 1, reports 3</td></tr>
+            <tr><th>columns()</th><td class="ln">10</td><td class="who">customer 6, restaurant 2, rider 1, reports 1</td></tr>
+            <tr><th>pad_right()</th><td class="ln">8</td><td class="who">customer 2, restaurant 3, rider 3</td></tr>
+            <tr><th>options()</th><td class="ln">5</td><td class="who">the four menus, plus the genre list</td></tr>
+            <tr><th>rule()</th><td class="ln">4</td><td class="who">the four menu loops</td></tr>
+            <tr><th>banner()</th><td class="ln">1</td><td class="who">main.py only, once at program start</td></tr>
+            <tr><th>clear_screen()</th><td class="ln">1</td><td class="who">main.py only, once at program start</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="note">
+      <b>The line to say out loud:</b> "I wrote the colours and boxes once in
+      <code>design.py</code> instead of copying them into five files, so all 91 functions look
+      like they belong to the same program — and so changing the width only has to happen in
+      one place."
     </div>
   </section>
 
-  <!-- ============ 5. THE ONE SURPRISING EDGE ============ -->
+  <!-- ============ 05 · GUARDS AND RULES ============ -->
   <section>
-    <div class="sec-head"><span class="num">05</span><h2>The one arrow a panel will ask about</h2></div>
+    <div class="sec-head">
+      <span class="num">05</span>
+      <h2>The rules, and the one place each rule is enforced</h2>
+      <span class="sub">what the program refuses to do</span>
+    </div>
     <p>
-      Out of every call in the program, exactly one crosses from one role file into another.
-      Everything else in <code>customer.py</code>, <code>restaurant.py</code> and
-      <code>rider.py</code> stays inside its own file.
+      A program that can be fed nonsense has to say no. CraveFlow has six rules, and each one
+      is checked in a single function rather than repeated. That is the difference between
+      having a rule and appearing to have one.
     </p>
 
-    <figure style="margin-top:24px">
+    <div class="tablewrap" style="margin-top:24px">
+      <table>
+        <caption>The six rules, and where each is enforced</caption>
+        <thead><tr><th>Rule</th><th>Where it is enforced</th><th>Line</th><th>What the user sees</th></tr></thead>
+        <tbody>
+          <tr>
+            <th>One order at a time</th>
+            <td><code>choose_food()</code> — not in either of the two doors, but in the one place an order is created</td>
+            <td class="ln">customer.py<br>401</td>
+            <td class="who">You already have order O1002 on the way.</td>
+          </tr>
+          <tr>
+            <th>One kitchen per order</th>
+            <td><code>choose_food()</code> — the restaurant-match check</td>
+            <td class="ln">customer.py<br>481</td>
+            <td class="who">Whopper is from a different restaurant.</td>
+          </tr>
+          <tr>
+            <th>Nothing sold out</th>
+            <td><code>choose_food()</code> — the availability check</td>
+            <td class="ln">customer.py<br>487</td>
+            <td class="who">Onion Rings is sold out, so it cannot be ordered.</td>
+          </tr>
+          <tr>
+            <th>You cannot reach another kitchen's order</th>
+            <td><code>ask_order_id()</code> — one guard, reused by accept, reject and cancel</td>
+            <td class="ln">restaurant.py<br>356</td>
+            <td class="who">You cannot accept that order.</td>
+          </tr>
+          <tr>
+            <th>A rider carries one order</th>
+            <td><code>claim_order()</code> — the FREE check</td>
+            <td class="ln">rider.py<br>118</td>
+            <td class="who">You are already delivering order O1004.</td>
+          </tr>
+          <tr>
+            <th>A menu name has to fit the table</th>
+            <td><code>add_food()</code> — the length check</td>
+            <td class="ln">restaurant.py<br>165</td>
+            <td class="who">Please keep the name under 25 letters.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <figure style="margin-top:30px">
       <div class="figframe">
-        <svg viewBox="0 0 760 210" role="img" aria-label="rider.deliver calls customer.show_receipt. The rider marks an order delivered, then hands over to the customer file to print the thank-you receipt.">
+        <svg viewBox="0 0 760 268" role="img" aria-label="The one cross-file arrow. rider.deliver marks an order DELIVERED and then calls customer.show_receipt to print the thank-you receipt. The bill itself is not copied: both show_receipt and show_order call customer.bill_lines, one function, so they cannot print different numbers.">
           <defs>
             <marker id="ah4" markerWidth="9" markerHeight="9" refX="7.5" refY="3.2" orient="auto">
-              <polygon points="0 0, 8 3.2, 0 6.4" fill="var(--accent)"/>
+              <polygon points="0 0, 8 3.2, 0 6.4" fill="#e08830"/>
             </marker>
           </defs>
 
@@ -571,61 +1113,403 @@ footer {
           <text class="t-file" x="625" y="60" text-anchor="middle">customer.py</text>
           <text class="t-fn" x="625" y="82" text-anchor="middle">show_receipt()</text>
 
-          <text class="t-note" x="20" y="132">Why it is worth knowing:</text>
-          <text class="t-note" x="20" y="150">the receipt is a customer-facing thing, so it lives in the customer's file,</text>
-          <text class="t-note" x="20" y="166">not in the rider's. The rider's job ends at the door. Duplicating the receipt</text>
-          <text class="t-note" x="20" y="182">into rider.py would mean two copies of the bill that could drift apart.</text>
+          <path class="edge-d" d="M625 100 V132 H380"/>
+          <path class="edge-d" d="M380 132 V158" marker-end="url(#ahd)"/>
+
+          <rect class="box" x="265" y="162" width="230" height="60" rx="2"/>
+          <text class="t-file" x="380" y="186" text-anchor="middle">customer.py</text>
+          <text class="t-fn" x="380" y="206" text-anchor="middle">bill_lines()</text>
+
+          <text class="t-note" x="20" y="150">Why it is worth knowing:</text>
+          <text class="t-note" x="20" y="168">the receipt is a customer-facing thing, so it lives in the customer's file,</text>
+          <text class="t-note" x="20" y="184">not in the rider's. The rider's job ends at the door. Copying the receipt</text>
+          <text class="t-note" x="20" y="200">into rider.py would mean two copies of the bill that could drift apart.</text>
+          <text class="t-note" x="510" y="196">Both show_order() and show_receipt()</text>
+          <text class="t-note" x="510" y="212">come here, so the two can never</text>
+          <text class="t-note" x="510" y="228">print different numbers.</text>
         </svg>
       </div>
       <figcaption>
-        <b>This is deliberate, and it is the honest answer to "why does the rider file import the
-        customer file?"</b> The receipt belongs to the customer, so it is written in the
-        customer's file and simply called from the rider's. The bill itself is not copied — both
-        the receipt and the order screen call <code>customer.bill_lines()</code>, one function,
-        so the two can never print different numbers for the same order.
+        <b>This is the honest answer to "why does the rider file import the customer file?"</b>
+        Out of every call in the program, exactly one crosses from one role file into another.
+        The receipt belongs to the customer, so it is written in the customer's file and called
+        from the rider's — and the bill itself is not duplicated, so the two screens can never
+        disagree.
       </figcaption>
     </figure>
   </section>
 
-  <!-- ============ 6. WHY design.py IS ITS OWN FILE ============ -->
+  <!-- ============ 06 · THE GUARD PATTERN ============ -->
   <section>
-    <div class="sec-head"><span class="num">06</span><h2>Why design.py earns its place</h2></div>
+    <div class="sec-head">
+      <span class="num">06</span>
+      <h2>One pattern, used three times: the guard</h2>
+      <span class="sub">the thing to point at</span>
+    </div>
     <p>
-      Count how many functions reach for each helper. These are the true call counts, taken
-      from the source — not an estimate.
+      Three functions across two files ask the same question — <i>which order do you mean?</i> —
+      and all three must refuse the wrong answer. Rather than repeat that refusal, each file
+      has one helper that does the asking and the checking, and the actions stay short.
+    </p>
+
+    <div class="termwrap" style="margin-top:24px">
+      <pre class="term"><span class="c"># restaurant.py — the guard, written once</span>
+<span class="k">ask_order_id</span>(username, action, allowed)
+
+   open_orders = orders_with_status(username, allowed)
+   if len(open_orders) == 0:
+       <span class="warn">warn("There is no order you can " + action + " right now.")</span>
+       return None              <span class="c"># nothing to act on</span>
+
+   show_orders(open_orders)     <span class="c"># only show what is allowed</span>
+   order_id = <span class="prompt">input("Which order to " + action + "? ").upper()</span>
+
+   if order_id not in DATA["orders"]:
+       <span class="warn">warn("No order found with the ID " + order_id + ".")</span>
+       return None
+
+   if order_id not in open_orders:
+       <span class="warn">warn("You cannot " + action + " that order.")</span>
+       return None              <span class="c"># it exists, but not ours</span>
+
+   return order_id</pre>
+    </div>
+
+    <div class="grid2" style="margin-top:26px">
+      <div class="tablewrap">
+        <table>
+          <caption>The three actions that reuse the guard</caption>
+          <thead><tr><th>Action</th><th>Allowed statuses</th><th>Result</th></tr></thead>
+          <tbody>
+            <tr><th>accept_order()</th><td class="ln">["PLACED"]</td><td class="who">→ ACCEPTED</td></tr>
+            <tr><th>reject_order()</th><td class="ln">["PLACED"]</td><td class="who">→ CANCELLED</td></tr>
+            <tr><th>cancel_order()</th><td class="ln">["PLACED", "ACCEPTED"]</td><td class="who">→ CANCELLED</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="note" style="margin:0;align-self:start">
+        <b>Why not put it in one shared file?</b> The three actions live in
+        <code>restaurant.py</code> and the rider's version lives in <code>rider.py</code> — they
+        ask different questions, because a kitchen picks from its own orders while a rider
+        picks from the shared queue. Two copies of a ten-line guard is cheaper than one shared
+        helper that both files must import for a single call.
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 07 · WHY NOTHING IS SAVED ============ -->
+  <section>
+    <div class="sec-head">
+      <span class="num">07</span>
+      <h2>Why the program writes no files at all</h2>
+      <span class="sub">the question that catches everyone</span>
+    </div>
+    <p>
+      There is a function called <span class="inline">save_data()</span> and it is called from
+      14 places across the program. It does nothing, and that is on purpose.
+    </p>
+    <div class="note">
+      <b>The answer to give:</b> "Saving is switched off on purpose so the demo always starts
+      the same way. The function is still called everywhere it should be, so turning saving back
+      on is a job of writing the body of one function. Nothing else has to change."
+    </div>
+    <p>
+      The consequence is that everything lives in memory for as long as the program runs. Close
+      the terminal and the orders, menu edits and price changes are gone, and the next run
+      starts from the same 29 kitchens and 143 dishes. For a demo that is the right behaviour,
+      because the fourth run looks exactly like the first.
+    </p>
+    <p>
+      There is no <span class="inline">import json</span> anywhere in the program, and no
+      <span class="inline">open()</span> call for writing. The only thing Python ever touches on
+      disk is the <span class="inline">.py</span> files themselves. That is why the ledger at the
+      top of this page reads <strong>0 files written</strong>.
+    </p>
+  </section>
+
+  <!-- ============ 08 · INPUT PROMPTS ============ -->
+  <section>
+    <div class="sec-head">
+      <span class="num">08</span>
+      <h2>Every question the program asks</h2>
+      <span class="sub">16 prompts · all of them</span>
+    </div>
+    <p>
+      These are the complete list of <span class="inline">input()</span> calls in the program,
+      in the order they can happen. If someone asks "what does it actually ask the user?",
+      this is the whole answer.
     </p>
 
     <div class="tablewrap" style="margin-top:24px">
       <table>
-        <caption>design.py — how widely each helper is used</caption>
-        <thead><tr><th>Helper</th><th>Callers</th><th>Which files use it</th></tr></thead>
+        <caption>All 16 input() prompts, with the function that asks them</caption>
+        <thead><tr><th>Prompt</th><th>File</th><th>Function</th><th>Line</th><th>Expected answer</th></tr></thead>
         <tbody>
-          <tr><th>heading()</th><td>28</td><td class="who">all four role files + main.py</td></tr>
-          <tr><th>line()</th><td>28</td><td class="who">all four role files + main.py</td></tr>
-          <tr><th>warn()</th><td>24</td><td class="who">all four role files + main.py</td></tr>
-          <tr><th>ok()</th><td>21</td><td class="who">all four role files + main.py</td></tr>
-          <tr><th>money()</th><td>13</td><td class="who">customer, restaurant, rider, reports</td></tr>
-          <tr><th>box()</th><td>10</td><td class="who">customer, restaurant, rider, reports</td></tr>
-          <tr><th>banner()</th><td>1</td><td class="who">main.py only — once, at program start</td></tr>
-          <tr><th>rule()</th><td>4</td><td class="who">the four menu loops, once per round</td></tr>
-          <tr><th>columns()</th><td>6</td><td class="who">customer, restaurant, rider, reports</td></tr>
-          <tr><th>options()</th><td>4</td><td class="who">the four menu loops only</td></tr>
-          <tr><th>pad_right()</th><td>8</td><td class="who">the row-aligning helpers in all four role files</td></tr>
+          <tr><th>Username: </th><td class="who">main.py</td><td><code>login()</code></td><td class="ln">21</td><td class="who">a username, or <code>exit</code></td></tr>
+          <tr><th>Password: </th><td class="who">main.py</td><td><code>login()</code></td><td class="ln">29</td><td class="who">the password, which is <code>1234</code> for everyone</td></tr>
+          <tr><th>Your choice: </th><td class="who">customer.py</td><td><code>pick_genre()</code></td><td class="ln">144</td><td class="who">1 to 8 for a style, or 0 to go back</td></tr>
+          <tr><th>Your choice: </th><td class="who">customer.py</td><td><code>customer_menu()</code></td><td class="ln">623</td><td class="who">1 to 4</td></tr>
+          <tr><th>Which restaurant? (0 to go back): </th><td class="who">customer.py</td><td><code>choose_food()</code></td><td class="ln">417</td><td class="who">a kitchen number</td></tr>
+          <tr><th>Food: </th><td class="who">customer.py</td><td><code>choose_food()</code></td><td class="ln">446</td><td class="who">an ID and a count like <code>F1001 4</code>, or 0</td></tr>
+          <tr><th>Which order ID? </th><td class="who">customer.py</td><td><code>cancel_order()</code></td><td class="ln">565</td><td class="who">an order ID like <code>O1004</code></td></tr>
+          <tr><th>Your choice: </th><td class="who">restaurant.py</td><td><code>restaurant_menu()</code></td><td class="ln">468</td><td class="who">1 to 9</td></tr>
+          <tr><th>Which order to <span class="inline">action</span>? </th><td class="who">restaurant.py</td><td><code>ask_order_id()</code></td><td class="ln">345</td><td class="who">the ID of an order you may act on</td></tr>
+          <tr><th>Name of the food: </th><td class="who">restaurant.py</td><td><code>add_food()</code></td><td class="ln">156</td><td class="who">under 25 characters</td></tr>
+          <tr><th>Price: </th><td class="who">restaurant.py</td><td><code>read_price()</code></td><td class="ln">54</td><td class="who">a number</td></tr>
+          <tr><th>Food ID (for example F101): </th><td class="who">restaurant.py</td><td><code>ask_item_id()</code></td><td class="ln">79</td><td class="who">an item ID this kitchen owns</td></tr>
+          <tr><th>Type YES to confirm: </th><td class="who">restaurant.py</td><td><code>delete_food()</code></td><td class="ln">259</td><td class="who">exactly <code>YES</code></td></tr>
+          <tr><th>Your choice: </th><td class="who">rider.py</td><td><code>rider_menu()</code></td><td class="ln">315</td><td class="who">1 to 6</td></tr>
+          <tr><th>Which order to <span class="inline">action</span>? </th><td class="who">rider.py</td><td><code>ask_order_id()</code></td><td class="ln">83</td><td class="who">the ID of a waiting order</td></tr>
+          <tr><th>Your choice: </th><td class="who">reports.py</td><td><code>owner_menu()</code></td><td class="ln">177</td><td class="who">1 to 4</td></tr>
         </tbody>
       </table>
     </div>
 
     <div class="note">
-      <b>The line to say out loud:</b> "I wrote the colours and boxes once in
-      <code>design.py</code> instead of copying them into four files, so all 87 functions look
-      like they belong to the same program — and so a change to the width only has to be made
-      in one place."
+      <b>Notice that only two files ask anything about identity.</b>
+      <code>main.py</code> asks for the username and password, and the other four role files
+      never ask who you are at all — they are told. That is why the menus have no "who are
+      you?" step: <code>open_menu()</code> already decided, and the username is passed in as
+      an argument to every function from then on.
     </div>
   </section>
 
-  <footer>
-    Generated by reading the source with Python's ast module · main.py 112 lines ·
-    data.py 277 · design.py 195 · restaurant.py 493 · customer.py 512 · rider.py 325 · reports.py 288
-  </footer>
+  <!-- ============ 09 · DATA SHAPE ============ -->
+  <section>
+    <div class="sec-head">
+      <span class="num">09</span>
+      <h2>The dictionary itself: four rooms in one building</h2>
+      <span class="sub">nested dictionaries, no classes</span>
+    </div>
+    <p>
+      The whole database is one dictionary called <span class="inline">DATA</span> with four
+      keys. Everything else in the program is a walk through it. Knowing the rooms and what
+      key each one is filed under is most of understanding the design.
+    </p>
+
+    <figure style="margin-top:24px">
+      <div class="figframe">
+        <svg viewBox="0 0 760 292" role="img" aria-label="The DATA dictionary has four keys. users holds one record per account with name, role, password, genre and fee. food holds one record per dish with name, price, restaurant and available. orders holds one record per order with customer, items, quantities, restaurant, total, status and rider. riders holds one record per rider with name, status and order.">
+          <defs>
+            <marker id="ah5" markerWidth="9" markerHeight="9" refX="7.5" refY="3.2" orient="auto">
+              <polygon points="0 0, 8 3.2, 0 6.4" fill="#e8e4da"/>
+            </marker>
+          </defs>
+
+          <rect class="box-a" x="250" y="12" width="260" height="54" rx="2"/>
+          <text class="t-file" x="380" y="34" text-anchor="middle">DATA</text>
+          <text class="t-fn" x="380" y="53" text-anchor="middle">one dictionary, four keys</text>
+
+          <path class="edge" d="M380 66 V84"/>
+          <path class="edge" d="M110 84 H650"/>
+          <path class="edge" d="M110 84 V112" marker-end="url(#ah5)"/>
+          <path class="edge" d="M283 84 V112" marker-end="url(#ah5)"/>
+          <path class="edge" d="M457 84 V112" marker-end="url(#ah5)"/>
+          <path class="edge" d="M650 84 V112" marker-end="url(#ah5)"/>
+
+          <rect class="box" x="15" y="116" width="190" height="140" rx="2"/>
+          <text class="t-file" x="110" y="138" text-anchor="middle">["users"]  ·  33</text>
+          <text class="t-fn" x="110" y="158" text-anchor="middle">"burger_king"</text>
+          <text class="t-note" x="110" y="180" text-anchor="middle">"name"    : Burger King</text>
+          <text class="t-note" x="110" y="198" text-anchor="middle">"role"    : restaurant</text>
+          <text class="t-note" x="110" y="216" text-anchor="middle">"genre"   : Burgers and S…</text>
+          <text class="t-note" x="110" y="234" text-anchor="middle">"fee"     : 35.0</text>
+
+          <rect class="box" x="188" y="116" width="190" height="140" rx="2"/>
+          <text class="t-file" x="283" y="138" text-anchor="middle">["food"]  ·  143</text>
+          <text class="t-fn" x="283" y="158" text-anchor="middle">"F1001"</text>
+          <text class="t-note" x="283" y="180" text-anchor="middle">"name"       : Whopper</text>
+          <text class="t-note" x="283" y="198" text-anchor="middle">"price"      : 280.0</text>
+          <text class="t-note" x="283" y="216" text-anchor="middle">"restaurant" : burger_king</text>
+          <text class="t-note" x="283" y="234" text-anchor="middle">"available"  : True</text>
+
+          <rect class="box" x="361" y="116" width="190" height="140" rx="2"/>
+          <text class="t-file" x="456" y="138" text-anchor="middle">["orders"]  ·  3</text>
+          <text class="t-fn" x="456" y="158" text-anchor="middle">"O1004"</text>
+          <text class="t-note" x="456" y="180" text-anchor="middle">"customer"  : yajat</text>
+          <text class="t-note" x="456" y="198" text-anchor="middle">"items"     : ["F1001"]</text>
+          <text class="t-note" x="456" y="216" text-anchor="middle">"status"    : PLACED</text>
+          <text class="t-note" x="456" y="234" text-anchor="middle">"total"     : 1155.0</text>
+
+          <rect class="box" x="534" y="116" width="190" height="140" rx="2"/>
+          <text class="t-file" x="629" y="138" text-anchor="middle">["riders"]  ·  2</text>
+          <text class="t-fn" x="629" y="158" text-anchor="middle">"raj"</text>
+          <text class="t-note" x="629" y="180" text-anchor="middle">"name"   : Raj Kumar</text>
+          <text class="t-note" x="629" y="198" text-anchor="middle">"status" : FREE</text>
+          <text class="t-note" x="629" y="216" text-anchor="middle">"order"  : None</text>
+          <text class="t-note" x="629" y="234" text-anchor="middle"></text>
+
+          <text class="t-note" x="380" y="278" text-anchor="middle">An order points at a person by username and at a dish by ID. Nothing is copied.</text>
+        </svg>
+      </div>
+      <figcaption>
+        <b>The important part is the naming.</b> An order stores
+        <code>"restaurant": "burger_king"</code> — a username, not a copy of the restaurant's
+        details. That is why changing Burger King's delivery fee in one place is enough, and
+        why the program never holds two conflicting copies of one fact.
+      </figcaption>
+    </figure>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <span class="num">10</span>
+      <h2>The four menus, side by side</h2>
+      <span class="sub">what each role can actually do</span>
+    </div>
+    <p>
+      These are the exact options each menu prints, in order, out of the running program. Read
+      down one column and you have described that role's job. Every menu ends with
+      <span class="inline">0. Go back</span>.
+    </p>
+
+    <div class="tablewrap">
+      <table>
+        <caption>All four menus, as the program prints them</caption>
+        <thead><tr><th>#</th><th>Customer<br><span class="who">4 choices</span></th><th>Restaurant<br><span class="who">9 choices</span></th><th>Rider<br><span class="who">6 choices</span></th><th>Owner<br><span class="who">4 choices</span></th></tr></thead>
+        <tbody>
+          <tr><th>1</th><td>See food by type</td><td>See my food</td><td>See orders waiting</td><td>Total sales</td></tr>
+          <tr><th>2</th><td>Place a new order</td><td>Add a new food item</td><td>Claim an order</td><td>Cancelled orders</td></tr>
+          <tr><th>3</th><td>My orders</td><td>Change a price</td><td>Mark picked up</td><td>Best selling item</td></tr>
+          <tr><th>4</th><td>Cancel an order</td><td>Sold out / back in stock</td><td>Mark delivered</td><td>Everything on one page</td></tr>
+          <tr><th>5</th><td class="who">—</td><td>Delete a food item</td><td>Cancel the order I am carrying</td><td class="who">—</td></tr>
+          <tr><th>6</th><td class="who">—</td><td>See my orders</td><td>My status</td><td class="who">—</td></tr>
+          <tr><th>7</th><td class="who">—</td><td>Accept an order</td><td class="who">—</td><td class="who">—</td></tr>
+          <tr><th>8</th><td class="who">—</td><td>Reject an order</td><td class="who">—</td><td class="who">—</td></tr>
+          <tr><th>9</th><td class="who">—</td><td>Cancel an accepted order</td><td class="who">—</td><td class="who">—</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note">
+      <b>The restaurant has the biggest menu — 9 choices — because it owns the food and the
+      order.</b> Adding an item, changing its price, marking it sold out and deleting it are
+      four edits to the food dictionary, and then accepting, rejecting and cancelling are three
+      edits to the order dictionary. Six state changes in one role, and that is exactly the
+      number of options it gets.
+    </div>
+  </section>
+
+  <!-- ============ 11 · THE SEED DATA ============ -->
+  <section>
+    <div class="sec-head">
+      <span class="num">11</span>
+      <h2>What is in the dictionary when the program starts</h2>
+      <span class="sub">29 kitchens · 143 dishes · 8 styles</span>
+    </div>
+    <p>
+      Everything the program knows at startup is built by one function,
+      <span class="inline">make_data()</span>, using two small helpers. This is the same data
+      every run gets, which is why the demo always looks the same.
+    </p>
+
+    <div class="tablewrap">
+      <table>
+        <caption>The eight styles, and how many kitchens are in each</caption>
+        <thead><tr><th>Style</th><th>Kitchens</th><th>Usernames</th></tr></thead>
+        <tbody>
+          <tr><th>North Indian</th><td class="ln">4</td><td class="who">tandoor, punjabi, old_delhi, curry_pot</td></tr>
+          <tr><th>South Indian</th><td class="ln">4</td><td class="who">madras, udupi, andhra, kerala</td></tr>
+          <tr><th>Biryani and Thalis</th><td class="ln">2</td><td class="who">biryani_adda, thali_house</td></tr>
+          <tr><th>Snacks and Street Food</th><td class="ln">4</td><td class="who">chaat, momo_house, rollwala, halidirams</td></tr>
+          <tr><th>Tea and Beverages</th><td class="ln">4</td><td class="who">chai_point, coffee_day, juice_factory, bubble_blast</td></tr>
+          <tr><th>Sweets and Desserts</th><td class="ln">3</td><td class="who">sweet_house, baker_street, kulfi_corner</td></tr>
+          <tr><th>Pizza and Pasta</th><td class="ln">5</td><td class="who">dominoes, pizza_hut, la_pinos, pasta_fresco, pizza_square</td></tr>
+          <tr><th>Burgers and Sandwiches</th><td class="ln">3</td><td class="who">burger_king, subway, grill_master</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note">
+      <b>Why the styles are a separate list of 8 literals and not worked out from the data:</b>
+      the screen order has to be the same every run. If the styles were collected from
+      whichever kitchen happened to be read first, the menu would shuffle between runs and
+      customers could not learn where things are. Fixing the order makes the program
+      predictable — a small choice a panel can see the reason for.
+    </div>
+  </section>
+
+  <!-- ============ 12 · THE MENU LOOP ============ -->
+  <section>
+    <div class="sec-head">
+      <span class="num">12</span>
+      <h2>The one loop that runs the whole program</h2>
+      <span class="sub">while True, and how it ends</span>
+    </div>
+    <p>
+      There is no framework and no window to close. The program is one loop that keeps redrawing
+      the menu until someone chooses to leave, and inside it a second, smaller trick: the menu
+      only prints the one line that can change, so a long session does not scroll the answer off
+      the screen.
+    </p>
+
+    <figure style="margin-top:24px">
+      <div class="figframe">
+        <svg viewBox="0 0 760 336" role="img" aria-label="The menu loop. Print the status line only if it changed since last time, print the heading and choices, read one choice, run that action, then go round again. Choosing 0 is the only way out.">
+          <defs>
+            <marker id="ah6" markerWidth="9" markerHeight="9" refX="7.5" refY="3.2" orient="auto">
+              <polygon points="0 0, 8 3.2, 0 6.4" fill="#e8e4da"/>
+            </marker>
+          </defs>
+
+          <rect class="box-a" x="250" y="10" width="260" height="48" rx="2"/>
+          <text class="t-file" x="380" y="30" text-anchor="middle">start of the loop</text>
+          <text class="t-fn" x="380" y="47" text-anchor="middle">design.rule()</text>
+
+          <path class="edge" d="M380 58 V80" marker-end="url(#ah6)"/>
+
+          <rect class="box" x="150" y="84" width="460" height="60" rx="2"/>
+          <text class="t-file" x="380" y="106" text-anchor="middle">print the status ONLY if it changed</text>
+          <text class="t-fn" x="380" y="126" text-anchor="middle">if status != last_status:  print()</text>
+
+          <path class="edge" d="M380 144 V166" marker-end="url(#ah6)"/>
+
+          <rect class="box" x="150" y="170" width="460" height="60" rx="2"/>
+          <text class="t-file" x="380" y="192" text-anchor="middle">print the heading and the choices</text>
+          <text class="t-fn" x="380" y="212" text-anchor="middle">design.heading(), design.options()</text>
+
+          <path class="edge" d="M380 230 V252" marker-end="url(#ah6)"/>
+
+          <rect class="box" x="150" y="256" width="460" height="60" rx="2"/>
+          <text class="t-file" x="380" y="278" text-anchor="middle">read one choice</text>
+          <text class="t-fn" x="380" y="298" text-anchor="middle">choice = input("Your choice: ")</text>
+
+          <path class="edge" d="M610 286 H700 V40 H620" marker-end="url(#ah6)"/>
+          <text class="t-edge" x="712" y="170" text-anchor="middle" transform="rotate(90 712 170)">again</text>
+
+          <path class="edge-d" d="M150 286 H46" marker-end="url(#ahd)"/>
+          <text class="t-note" x="98" y="272" text-anchor="middle">chose 0, so leave</text>
+        </svg>
+      </div>
+      <figcaption>
+        <b>This is why the customer's menu shows the order status once, not every time.</b>
+        <code>customer_menu()</code> keeps a variable <code>last_status</code>. It prints the
+        line when it differs from what was printed before, and stays quiet otherwise. Same idea
+        in <code>rider_menu()</code> for the FREE/BUSY line. It is a three-line trick that
+        solves a real problem: repeating the same line pushes the answer down the screen and out
+        of view.
+      </figcaption>
+    </figure>
+
+    <div class="termwrap" style="margin-top:26px">
+      <pre class="term"><span class="c"># the whole menu loop, in five lines of idea</span>
+<span class="k">while True</span>:
+    <span class="c">if it changed, say what changed</span>
+    <span class="c">show the heading and the choices</span>
+    <span class="c">ask for one choice</span>
+    <span class="k">if</span> choice == <span class="prompt">"0"</span>: <span class="k">return</span>          <span class="c"># the only way out</span>
+    <span class="k">else</span>       : run that one action, then loop</pre>
+    </div>
+  </section>
 
 </div>
+
+<footer>
+  CraveFlow · from craving to delivery, seamlessly<br>
+  7 files · 91 functions · 16 input prompts · 0 files written<br>
+  Every function count, line number and figure on this page was read out of the source with
+  Python's <code>ast</code> module, and the worked example was confirmed by running the
+  program. Where a number on an earlier version of this page disagreed with the source, the
+  source won.
+</footer>
