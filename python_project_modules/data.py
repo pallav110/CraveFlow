@@ -331,40 +331,6 @@ def make_data():
 
     data["orders"] = {}
 
-    # 2 x Margherita (250) + 1 x Garlic Bread (120) = 620
-    # 620 + Domino's fee of 40 = 660
-    data["orders"]["O1001"] = {
-        "customer": "yajat",
-        "items": ["F101", "F102"],
-        "quantities": {"F101": 2, "F102": 1},
-        "restaurant": "dominoes",
-        "total": 660.00,
-        "status": "DELIVERED",
-        "rider": "raj",
-    }
-
-    # 1 x Butter Chicken (280) + Tandoor's fee of 25 = 305
-    data["orders"]["O1002"] = {
-        "customer": "yajat",
-        "items": ["F201"],
-        "quantities": {"F201": 1},
-        "restaurant": "tandoor",
-        "total": 305.00,
-        "status": "ACCEPTED",
-        "rider": None,
-    }
-
-    # 1 x Paneer Tikka (220) + Tandoor's fee of 25 = 245
-    data["orders"]["O1003"] = {
-        "customer": "yajat",
-        "items": ["F202"],
-        "quantities": {"F202": 1},
-        "restaurant": "tandoor",
-        "total": 245.00,
-        "status": "CANCELLED",
-        "rider": None,
-    }
-
     # ---- The riders -----------------------------------------------
     # status is FREE or BUSY. This is the lock that stops one rider
     # picking up two orders at the same time.
