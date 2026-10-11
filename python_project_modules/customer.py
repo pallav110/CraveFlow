@@ -88,44 +88,78 @@ def places_by_genre():
     return groups
 
 
+def browse_one_genre(group, what):
+    """Print the kitchens in one style of food, with their food on sale.
+
+    what is shown above the table, so the screen says which style we
+    are looking at.
+
+    Returns the list of kitchens we printed, because place_order()
+    needs that same list to number them the same way.
+    """
+    total_count = 0
+
+    for place in group:
+        items = available_food(place)
+        place_name = DATA["users"][place]["name"]
+        fee = DATA["users"][place]["fee"]
+
+        design.box(place_name + "   -   delivery " + design.money(fee),
+               [food_line(item_id) for item_id in items])
+
+        total_count = total_count + len(items)
+
+    design.line("Showing " + str(total_count) + " items from "
+                + str(len(group)) + " " + what + ".")
+    print()
+
+    return group
+
+
 def browse(username):
-    """Show every restaurant with the food it has on sale right now."""
+    """Ask which kind of food they want, then show only those kitchens.
+
+    There are far too many kitchens and dishes to print all at once.
+    So we ask first, and then print one style of food at a time, which
+    keeps the screen short enough to actually read.
+    """
     customer_name = DATA["users"][username]["name"]
 
-    design.heading("Hello " + customer_name + ", what would you like?")
+    design.heading("Hello " + customer_name + ", what kind of food?")
 
     groups = places_by_genre()
-    places = []
 
-    for group in groups:
-        places = places + group[1]
-
-    if len(places) == 0:
+    if len(groups) == 0:
         design.warn("No restaurant has food available right now.")
         print()
         return []
 
-    total_count = 0
+    design.options([group[0] for group in groups])
 
-    for group in groups:
-        design.line(group[0].upper())
-        print()
-
-        for place in group[1]:
-            items = available_food(place)
-            place_name = DATA["users"][place]["name"]
-            fee = DATA["users"][place]["fee"]
-
-            design.box(place_name + "   -   delivery " + design.money(fee),
-                   [food_line(item_id) for item_id in items])
-
-            total_count = total_count + len(items)
-
-    design.line("Showing " + str(total_count) + " items from "
-                + str(len(places)) + " restaurants.")
+    choice = input("Your choice: ")
     print()
 
-    return places
+    if not choice.isdigit():
+        design.warn("Please type a number.")
+        print()
+        return []
+
+    number = int(choice)
+
+    # 0 is what every menu uses to go back, so it has to work here too
+    if number == 0:
+        return []
+
+    if number < 1 or number > len(groups):
+        design.warn("There is no choice number " + choice + ".")
+        print()
+        return []
+
+    group = groups[number - 1]
+
+    design.heading(group[0])
+
+    return browse_one_genre(group[1], "restaurants")
 
 
 def show_food_of(place):
@@ -348,10 +382,24 @@ def place_order(username):
         print()
         return
 
+    design.heading("Place a new order")
+
+    busy = my_active_order(username)
+
+    if busy is not None:
+        design.warn("You already have order " + busy
+                    + " on the way.")
+        design.line("Please wait for it, or cancel it, before ordering again.")
+        print()
+        return
+
     places = browse(username)
 
     if len(places) == 0:
         return
+
+    design.line("Type the number of the kitchen you want.")
+    print()
 
     while True:
         number = 1
@@ -536,7 +584,7 @@ def customer_menu(username):
 
         design.heading("What would you like to do?")
         design.options([
-            "See all food",
+            "See food by type",
             "Place a new order",
             "My orders",
             "Cancel an order",
