@@ -41,10 +41,15 @@ each one (`0. Go back`) before signing in as the next:
 
 | Step | Sign in as | Do this |
 | --- | --- | --- |
-| 1 | `yajat` | **Place a new order** → pick a kitchen, pick a dish |
+| 1 | `yajat` | **Place a new order** → pick a kind of food, a kitchen, then a dish |
 | 2 | `tandoor` (or whichever kitchen took it) | **Accept an order** |
 | 3 | `raj` | **Claim an order**, then **Mark picked up**, then **Mark delivered** |
 | 4 | `owner` | **Total sales** and **Best selling item** |
+
+**Place a new order** and **See food by type** both ask the same way and end in
+the same place — the only difference is the first heading you see. Use **See
+food by type** if a teacher asks how the browsing works, and **Place a new
+order** if they just want the food moving.
 
 Because saving is switched off, start again from step 1 for a second run — the
 demo data resets itself every time.
