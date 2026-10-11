@@ -1,0 +1,13 @@
+# Windows editors write CRLF line endings, and Git would otherwise swap
+# them for LF in the repository and change every line of every file the
+# next time it is checked out. Marking the file types here keeps the
+# saved bytes the same as the working bytes.
+
+* text=auto
+
+*.py    text eol=lf
+*.md    text eol=lf
+*.html  text eol=lf
+*.json  text eol=lf
+
+*.png   binary
