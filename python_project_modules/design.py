@@ -11,7 +11,7 @@ RED = "\033[38;5;203m"
 GREEN = "\033[38;5;114m"
 END = "\033[0m"
 
-WIDTH = 58
+WIDTH = 76
 
 # The logo is drawn with a 5 x 5 letter pattern, which keeps it compact.
 # Each letter is just five ordinary strings, five characters wide.
@@ -86,9 +86,11 @@ def cut(text, length):
 
 
 def banner():
-    """Display the CraveFlow logo and tagline."""
-    clear_screen()
+    """Display the CraveFlow logo and tagline.
 
+    This is called once, at the start of the program. It does not clear
+    the screen, so nothing the user has already read gets thrown away.
+    """
     logo_width = max(len(row) for row in LOGO_ROWS)
     inside = max(WIDTH, logo_width)
     border = "+" + "-" * (inside + 2) + "+"
@@ -113,10 +115,21 @@ def banner():
     print()
 
 
+def rule():
+    """Draw a thin divider between two screens.
+
+    This is what separates one round of a menu from the next. It does
+    not clear the screen, so the user can still scroll back and read
+    anything that was printed above it.
+    """
+    print()
+    print(GREY + "-" * WIDTH + END)
+
+
 def heading(text):
     """Print a section heading."""
     text = " " + str(text) + " "
-    available = max(0, WIDTH - len(text) - 3)
+    available = max(0, WIDTH - len(text) - 2)
 
     print()
     print(
@@ -143,10 +156,14 @@ def warn(text):
 
 
 def columns(left, right, left_width, gap=2):
-    """Print two aligned columns."""
-    left_width = max(0, min(left_width, WIDTH - 2))
-    gap = max(0, min(gap, WIDTH - 2 - left_width))
-    right_width = WIDTH - 2 - left_width - gap
+    """Print two aligned columns.
+
+    The whole row comes out exactly WIDTH characters wide, so it lines
+    up with heading() and rule(), and still fits inside box().
+    """
+    left_width = max(0, min(left_width, WIDTH - gap))
+    gap = max(0, min(gap, WIDTH - left_width))
+    right_width = WIDTH - left_width - gap
 
     left_text = pad_right(cut(left, left_width), left_width)
     right_text = pad_left(cut(right, right_width), right_width)
@@ -156,8 +173,13 @@ def columns(left, right, left_width, gap=2):
 
 def box(title, lines):
     """Draw a bordered panel."""
+    # A content row is "| " + WIDTH characters + " |", so the row is
+    # WIDTH + 4 wide. The top border has to be that same width, and it
+    # is built out of: a +, a -, the title, then dashes for the rest.
+    # Those first two characters leave WIDTH + 1 of dashes to share
+    # between the title and the tail.
     title = " " + cut(title, WIDTH - 6) + " "
-    remaining = WIDTH - len(title) - 2
+    remaining = WIDTH + 1 - len(title)
 
     top = "+" + "-" + title + "-" * max(0, remaining) + "+"
     bottom = "+" + "-" * (len(top) - 2) + "+"
