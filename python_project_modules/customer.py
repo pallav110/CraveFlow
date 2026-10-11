@@ -10,7 +10,7 @@
 # touches another customer's orders.
 
 import python_project_modules.design as design
-from python_project_modules.data import DATA, save_data
+from python_project_modules.data import DATA, GENRES, save_data
 
 
 def restaurants_with_food():
@@ -59,13 +59,46 @@ def food_line(item_id):
     return design.columns(name, design.money(item["price"]), 32)
 
 
+def places_by_genre():
+    """Group every restaurant that has food, by the kind of food it cooks.
+
+    GENRES holds the order we show them in, so the screen looks the same
+    every time the program is run. A kitchen we do not have a genre for
+    is still shown, at the end, so nothing can ever be hidden by mistake.
+    """
+    groups = []
+    open_places = restaurants_with_food()
+
+    for genre in GENRES:
+        names = []
+
+        for username in DATA["users"]:
+            if DATA["users"][username]["role"] != "restaurant":
+                continue
+
+            if DATA["users"][username].get("genre") != genre:
+                continue
+
+            if username in open_places:
+                names.append(username)
+
+        if len(names) > 0:
+            groups.append([genre, names])
+
+    return groups
+
+
 def browse(username):
     """Show every restaurant with the food it has on sale right now."""
     customer_name = DATA["users"][username]["name"]
 
     design.heading("Hello " + customer_name + ", what would you like?")
 
-    places = restaurants_with_food()
+    groups = places_by_genre()
+    places = []
+
+    for group in groups:
+        places = places + group[1]
 
     if len(places) == 0:
         design.warn("No restaurant has food available right now.")
@@ -74,15 +107,19 @@ def browse(username):
 
     total_count = 0
 
-    for place in places:
-        items = available_food(place)
-        place_name = DATA["users"][place]["name"]
-        fee = DATA["users"][place]["fee"]
+    for group in groups:
+        design.line(group[0].upper())
+        print()
 
-        design.box(place_name + "   -   delivery " + design.money(fee),
-               [food_line(item_id) for item_id in items])
+        for place in group[1]:
+            items = available_food(place)
+            place_name = DATA["users"][place]["name"]
+            fee = DATA["users"][place]["fee"]
 
-        total_count = total_count + len(items)
+            design.box(place_name + "   -   delivery " + design.money(fee),
+                   [food_line(item_id) for item_id in items])
+
+            total_count = total_count + len(items)
 
     design.line("Showing " + str(total_count) + " items from "
                 + str(len(places)) + " restaurants.")
