@@ -275,21 +275,32 @@ def my_status(username):
 
 
 def rider_menu(username):
-    """Keep showing the rider menu until they choose to leave."""
-    rider_name = DATA["users"][username]["name"]
+    """Keep showing the rider menu until they choose to leave.
+
+    The rider's name is printed once, by main.welcome(), at the moment
+    they sign in.
+
+    Whether the rider is FREE or BUSY is the one thing here that really
+    changes, so it is worth showing. It is printed only when it has
+    actually changed, which means a rider idly browsing the menu does
+    not push their own answer down the screen over and over.
+    """
+    last_status = ""
 
     while True:
         design.rule()
-        design.ok(rider_name + " - rider")
-        design.line("Signed in as " + rider_name)
 
         lock = my_lock(username)
 
         if lock["status"] == "FREE":
-            design.line("You are FREE. You can claim a waiting order.")
+            status = "You are FREE. You can claim a waiting order."
         else:
-            design.line("You are BUSY with " + str(lock["order"]) + ".")
-        print()
+            status = "You are BUSY carrying " + str(lock["order"]) + "."
+
+        if status != last_status:
+            design.line(status)
+            print()
+            last_status = status
 
         design.heading("What would you like to do?")
         design.options([

@@ -156,13 +156,15 @@ def best_seller():
 
 
 def owner_menu(username):
-    """Keep showing the owner menu until they choose to leave."""
+    """Keep showing the owner menu until they choose to leave.
+
+    The owner is signed in once, and main.welcome() already says so.
+    Nothing about the owner changes from one choice to the next, so
+    there is nothing here that needs to be printed again.
+    """
 
     while True:
         design.rule()
-        design.ok("Store Owner - owner")
-        design.line("Signed in as " + username)
-        print()
 
         design.heading("What would you like to see?")
         design.options([

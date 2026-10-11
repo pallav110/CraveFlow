@@ -441,14 +441,16 @@ def order_history(username):
 
 
 def restaurant_menu(username):
-    """Keep showing the restaurant menu until they choose to leave."""
-    restaurant_name = DATA["users"][username]["name"]
+    """Keep showing the restaurant menu until they choose to leave.
+
+    The name of the kitchen is printed once, by main.welcome(), at the
+    moment they sign in. Printing it again before every choice would
+    push the actual answer down the screen and out of view, so all
+    that is left here is the list of things they can do.
+    """
 
     while True:
         design.rule()
-        design.ok(restaurant_name + " - restaurant")
-        design.line("Signed in as " + restaurant_name)
-        print()
 
         design.heading("What would you like to do?")
         design.options([

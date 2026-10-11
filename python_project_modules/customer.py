@@ -469,20 +469,33 @@ def cancel_order(username):
 
 
 def customer_menu(username):
-    """Keep showing the customer menu until they choose to leave."""
-    customer_name = DATA["users"][username]["name"]
+    """Keep showing the customer menu until they choose to leave.
+
+    The name of the person is printed once, by main.welcome(), at the
+    moment they sign in. Repeating it before every choice would push
+    the actual answer down the screen and out of view.
+
+    What is repeated is only the one line that can change: whether
+    they still have an order on the way. It is shown the first time
+    it appears, and then left alone until it actually changes, so a
+    long session does not fill up with the same line again and again.
+    """
+    last_status = ""
 
     while True:
         design.rule()
-        design.ok(customer_name + " - customer")
-        design.line("Signed in as " + username)
-        print()
 
         active = my_active_order(username)
 
         if active is not None:
-            design.line("You have an order on the way: " + active)
+            status = "Order " + active + " is on the way."
+        else:
+            status = "You have no order on the way."
+
+        if status != last_status:
+            design.line(status)
             print()
+            last_status = status
 
         design.heading("What would you like to do?")
         design.options([
