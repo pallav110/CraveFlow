@@ -88,18 +88,25 @@ def places_by_genre():
     return groups
 
 
-def browse_one_genre(group, what):
-    """Print the kitchens in one style of food, with their food on sale.
+def browse_one_genre(username, genre, places):
+    """Show the kitchens in one style of food, then let them order.
 
-    what is shown above the table, so the screen says which style we
-    are looking at.
+    Browsing on its own used to be a dead end. The customer could read
+    the food, then had to go back to the menu and start ordering from
+    the beginning, which printed the same tables a second time. So
+    choosing a style now goes straight into choosing from it.
 
-    Returns the list of kitchens we printed, because place_order()
-    needs that same list to number them the same way.
+    genre is the name of the style, shown as the heading. places is
+    the list of kitchens in it.
+
+    Returns the new order ID if one was placed, and None if they did
+    not end up ordering.
     """
+    design.heading(genre)
+
     total_count = 0
 
-    for place in group:
+    for place in places:
         items = available_food(place)
         place_name = DATA["users"][place]["name"]
         fee = DATA["users"][place]["fee"]
@@ -110,10 +117,50 @@ def browse_one_genre(group, what):
         total_count = total_count + len(items)
 
     design.line("Showing " + str(total_count) + " items from "
-                + str(len(group)) + " " + what + ".")
+                + str(len(places)) + " restaurants.")
     print()
 
-    return group
+    return choose_food(username, places)
+
+
+def pick_genre(question):
+    """Show the list of food styles and return the one they picked.
+
+    Both ways into ordering ask this the same way, so the screen a
+    customer sees is the same whichever door they came through.
+
+    Returns [genre, kitchens], or None if they went back.
+    """
+    groups = places_by_genre()
+
+    if len(groups) == 0:
+        design.warn("No restaurant has food available right now.")
+        print()
+        return None
+
+    design.heading(question)
+    design.options([group[0] for group in groups])
+
+    choice = input("Your choice: ")
+    print()
+
+    if not choice.isdigit():
+        design.warn("Please type a number.")
+        print()
+        return None
+
+    number = int(choice)
+
+    # 0 is what every menu uses to go back, so it has to work here too
+    if number == 0:
+        return None
+
+    if number < 1 or number > len(groups):
+        design.warn("There is no choice number " + choice + ".")
+        print()
+        return None
+
+    return groups[number - 1]
 
 
 def browse(username):
@@ -125,41 +172,12 @@ def browse(username):
     """
     customer_name = DATA["users"][username]["name"]
 
-    design.heading("Hello " + customer_name + ", what kind of food?")
+    picked = pick_genre("Hello " + customer_name + ", what kind of food?")
 
-    groups = places_by_genre()
+    if picked is None:
+        return None
 
-    if len(groups) == 0:
-        design.warn("No restaurant has food available right now.")
-        print()
-        return []
-
-    design.options([group[0] for group in groups])
-
-    choice = input("Your choice: ")
-    print()
-
-    if not choice.isdigit():
-        design.warn("Please type a number.")
-        print()
-        return []
-
-    number = int(choice)
-
-    # 0 is what every menu uses to go back, so it has to work here too
-    if number == 0:
-        return []
-
-    if number < 1 or number > len(groups):
-        design.warn("There is no choice number " + choice + ".")
-        print()
-        return []
-
-    group = groups[number - 1]
-
-    design.heading(group[0])
-
-    return browse_one_genre(group[1], "restaurants")
+    return browse_one_genre(username, picked[0], picked[1])
 
 
 def show_food_of(place):
@@ -362,41 +380,28 @@ def my_orders(username):
         show_order(order_id)
 
 
-def place_order(username):
-    """Ask what the customer wants, and create the order.
+def choose_food(username, places):
+    """Pick a kitchen from a list, then pick food from that kitchen.
 
-    There are four checks we must get past before an order is made:
-      1. they must pick at least one thing
-      2. everything must come from one restaurant
-      3. nothing they picked may have sold out since they looked
-      4. they cannot already have an order on the way
+    places is the list of kitchens we already printed, so the numbers
+    on screen are the numbers we accept. Both "Place a new order" and
+    "See food by type" come through here, so the two ways of ordering
+    behave exactly the same.
+
+    The rule that a customer cannot have two orders on the way at once
+    is checked here rather than in either caller, because this is the
+    only place an order is actually created.
+
+    Returns the new order ID if one was placed, and None if they did
+    not end up ordering.
     """
-    design.heading("Place a new order")
-
     busy = my_active_order(username)
 
     if busy is not None:
-        design.warn("You already have order " + busy
-                    + " on the way.")
+        design.warn("You already have order " + busy + " on the way.")
         design.line("Please wait for it, or cancel it, before ordering again.")
         print()
-        return
-
-    design.heading("Place a new order")
-
-    busy = my_active_order(username)
-
-    if busy is not None:
-        design.warn("You already have order " + busy
-                    + " on the way.")
-        design.line("Please wait for it, or cancel it, before ordering again.")
-        print()
-        return
-
-    places = browse(username)
-
-    if len(places) == 0:
-        return
+        return None
 
     design.line("Type the number of the kitchen you want.")
     print()
@@ -412,7 +417,7 @@ def place_order(username):
         choice = input("Which restaurant? (0 to go back): ")
 
         if choice == "0":
-            return
+            return None
 
         if not choice.isdigit():
             design.warn("Please type a number.")
@@ -493,7 +498,7 @@ def place_order(username):
     if len(chosen) == 0:
         design.warn("Nothing was selected, so no order was made.")
         print()
-        return
+        return None
 
     order_id = build_order(username, place, chosen)
 
@@ -501,6 +506,31 @@ def place_order(username):
     design.ok("Order placed! Your order ID is " + order_id + ".")
     print()
     show_order(order_id)
+
+    return order_id
+
+
+def place_order(username):
+    """Ask what the customer wants, and create the order.
+
+    There are four checks we must get past before an order is made:
+      1. they must pick at least one thing
+      2. everything must come from one restaurant
+      3. nothing they picked may have sold out since they looked
+      4. they cannot already have an order on the way
+
+    The first one and the last one are checked inside choose_food(),
+    because the customer also gets there through "See food by type"
+    and the rules have to be the same on both roads.
+    """
+    design.heading("Place a new order")
+
+    picked = pick_genre("Which kind of food?")
+
+    if picked is None:
+        return None
+
+    return browse_one_genre(username, picked[0], picked[1])
 
 
 def cancel_order(username):
