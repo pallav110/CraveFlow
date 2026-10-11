@@ -121,7 +121,7 @@ There is no automated test suite, by decision. These are the checkpoints instead
 | **Status flow is broken** — cancellation reachable from two states, by three roles | Task 7 and 8 both check status *before* acting. A `DELIVERED` order is refused everywhere. Task 6 is written by hand as the owner of that logic |
 | **Money shows `260.49000000000001`** | `round(x, 2)` on every display, and the total is stored once, never recomputed |
 | **A feature is quietly dropped under viva pressure** | The forbidden-construct list is in every spec's Boundaries. It is checked at Task 10, not hoped for |
-| **Demo is run on a machine where `data.json` is corrupt** | `load_data()` falls back to fresh demo accounts rather than crashing |
+| ~~**Demo is run on a machine where `data.json` is corrupt**~~ | **No longer possible — saving is switched off, so there is no file to be corrupt. Every run starts from the same demo data** |
 | **Scope creep** — real payments, multiple addresses, ratings | Cut list is below. Not on the build order. If time runs short, cut from the bottom |
 
 ---

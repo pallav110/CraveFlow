@@ -24,8 +24,8 @@ dist/
 .DS_Store
 Thumbs.db
 
-# CraveFlow writes this file itself on first run, so it does not need
-# to be saved. Delete it and the demo data comes back.
+# Saving is switched off, so CraveFlow does not write a data file at
+# the moment. These lines are kept in case saving is turned back on.
 data.json
 output_data/data.json
 .claude

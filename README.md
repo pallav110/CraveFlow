@@ -36,6 +36,19 @@ Every account uses the password `1234`. Sign in as different people to see the
 different menus — a restaurant can only see its own food, and a customer can
 only see their own orders.
 
+**To show the whole flow**, run the four roles in this order, signing out of
+each one (`0. Go back`) before signing in as the next:
+
+| Step | Sign in as | Do this |
+| --- | --- | --- |
+| 1 | `yajat` | **Place a new order** → pick a kitchen, pick a dish |
+| 2 | `tandoor` (or whichever kitchen took it) | **Accept an order** |
+| 3 | `raj` | **Claim an order**, then **Mark picked up**, then **Mark delivered** |
+| 4 | `owner` | **Total sales** and **Best selling item** |
+
+Because saving is switched off, start again from step 1 for a second run — the
+demo data resets itself every time.
+
 ---
 
 ## Files
@@ -44,13 +57,12 @@ only see their own orders.
 CraveFlow/
   main.py                  Starts the program
   python_project_modules/  Everything else lives in here
-  output_data/             Saved data goes in here
 ```
 
 | File | What it does |
 |---|---|
 | `main.py` | Starts the program, asks who you are, opens the right menu |
-| `python_project_modules/data.py` | The one dictionary that holds everything, plus saving and loading |
+| `python_project_modules/data.py` | The one dictionary that holds everything |
 | `python_project_modules/design.py` | The colours, the logo, and the boxes. Written once so they match everywhere |
 | `python_project_modules/customer.py` | Everything a customer can do |
 | `python_project_modules/restaurant.py` | Everything a restaurant can do |
@@ -67,17 +79,14 @@ on its own because it is the one file you actually run.
 
 ### Saving your changes
 
-Data is saved to `output_data/data.json`, so anything you add or change
-survives closing the program. **Delete that file to start fresh** with the
-demo data.
+Saving is switched off. The data lives only while the program is open, so it
+always starts from exactly the same demo data every time — which makes a demo
+much easier to follow, because the person watching sees the same flow the same
+way on every run.
 
-The program finds this file using its own location rather than the folder you
-happened to run it from, so it works even if a teacher runs it from somewhere
-else.
-
-The saving part sits at the bottom of `data.py`, below a marked line. It is the
-one extra — the program runs perfectly well without it, just with nothing
-remembered between sessions.
+Nothing had to change elsewhere: `save_data()` is still called everywhere it
+always was, it just has nothing to do yet. Putting saving back is a job of
+writing the body of that one function.
 
 ### The logo
 

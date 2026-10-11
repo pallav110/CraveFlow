@@ -146,12 +146,13 @@ still exist and all still get different menus — while the hardest part is avoi
 
 ## Success criteria
 
-- [ ] Four demo accounts load from `data.json`, and three when the file does not exist
-- [ ] Wrong username and wrong password each give their own message, then re-prompt
-- [ ] Typing `exit` at the username prompt returns to the shell without a traceback
-- [ ] Correct login routes to the menu for that role
-- [ ] Signing out saves the file
-- [ ] An item added in one run is still there in the next
+- [x] Demo accounts are built in code, so they are always there and always the same
+- [x] Wrong username and wrong password each give their own message, then re-prompt
+- [x] Typing `exit` at the username prompt returns to the shell without a traceback
+- [x] Correct login routes to the menu for that role
+- [x] Signing out returns to the sign in prompt without a traceback
+- [ ] ~~Signing out saves the file~~ — **dropped on purpose.** Saving is switched off, so
+      every run starts from the same demo data. This is what makes a demo repeatable
 
 ---
 
