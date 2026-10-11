@@ -445,7 +445,7 @@ def restaurant_menu(username):
     restaurant_name = DATA["users"][username]["name"]
 
     while True:
-        design.banner()
+        design.rule()
         design.ok(restaurant_name + " - restaurant")
         design.line("Signed in as " + restaurant_name)
         print()

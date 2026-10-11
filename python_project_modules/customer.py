@@ -473,7 +473,7 @@ def customer_menu(username):
     customer_name = DATA["users"][username]["name"]
 
     while True:
-        design.banner()
+        design.rule()
         design.ok(customer_name + " - customer")
         design.line("Signed in as " + username)
         print()

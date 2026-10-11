@@ -159,7 +159,7 @@ def owner_menu(username):
     """Keep showing the owner menu until they choose to leave."""
 
     while True:
-        design.banner()
+        design.rule()
         design.ok("Store Owner - owner")
         design.line("Signed in as " + username)
         print()

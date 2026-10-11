@@ -2,7 +2,6 @@
 # This file starts the program. It asks who you are, and then opens the
 # right menu for that person.
 
-import python_project_modules.data as data
 import python_project_modules.design as design
 import python_project_modules.restaurant as restaurant
 import python_project_modules.customer as customer
@@ -17,7 +16,6 @@ def login():
     Returns the username if they got in, and None if they typed exit.
     """
     while True:
-        design.banner()
         design.heading("Please sign in")
 
         username = input("Username: ")
@@ -49,7 +47,6 @@ def welcome(username):
     """Say hello, and show which menu they are about to get."""
     person = DATA["users"][username]
 
-    design.banner()
     design.ok("Signed in as " + person["name"])
     print()
     design.line("Role: " + person["role"])
@@ -88,12 +85,19 @@ def open_menu(username):
 
 def run():
     """Keep signing in and out until the user quits."""
+    # the logo is shown once, right here, when the program starts.
+    # The screen is cleared once at the beginning as well, so the
+    # program always begins on a clean page. After this, nothing in
+    # the program clears the screen again, so whatever the user has
+    # already read stays on screen where they can scroll back to it.
+    design.clear_screen()
+    design.banner()
+
     while True:
         username = login()
 
         # login returns None when they type exit
         if username is None:
-            design.banner()
             design.line("Thank you for using CraveFlow.")
             print()
             break
@@ -104,7 +108,6 @@ def run():
         # they are signing out now, so save whatever they changed
         save_data()
 
-        design.banner()
         design.line("You have been signed out.")
         print()
 

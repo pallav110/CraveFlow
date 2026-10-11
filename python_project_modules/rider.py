@@ -279,7 +279,7 @@ def rider_menu(username):
     rider_name = DATA["users"][username]["name"]
 
     while True:
-        design.banner()
+        design.rule()
         design.ok(rider_name + " - rider")
         design.line("Signed in as " + rider_name)
 
